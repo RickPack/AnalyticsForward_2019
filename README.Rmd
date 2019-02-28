@@ -1,0 +1,26 @@
+---
+title: "Analytics>Forward 2019"
+author: "Rick Pack"
+date: "February 27, 2019"
+# output: html_document
+output:
+  md_document:
+    variant: markdown_github
+---
+
+```{r setup, include=FALSE, cache = TRUE}
+knitr::opts_chunk$set(echo = FALSE)
+source('Meetup_RSVP_Yes_20190227.R')
+```
+
+## "Analytics>Forward" (2019) - 5th annual unconference by Research Triangle Analysts
+
+Files for Analytics>Forward 2019 by Research Triangle Analysts - "Pitch a talk, hear some talks" #AnalyticsForward http://bit.ly/AF2019Signup
+
+```{r af_2019}
+print(p1)
+print(p2)
+print(p3)
+print(p4)
+print(p5)
+```
