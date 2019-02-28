@@ -8,7 +8,7 @@ output:
     variant: markdown_github
 ---
 
-```{r setup, include=FALSE, cache = FALSE}
+```{r setup, include=FALSE, cache = TRUE}
 knitr::opts_chunk$set(echo = FALSE)
 ## Save files locally?
 save_to_folder <- TRUE
