@@ -5,7 +5,7 @@ library(meetupr)
 library(lubridate)
 library(magick)
 library(directlabels)
-
+library(highcharter)
 
 
 if (!github_file) {
@@ -48,10 +48,6 @@ if (!github_file) {
   AF17_frm <- meetup_yes_RSVPs("AF17", AF17_id)
   AF16_frm <- meetup_yes_RSVPs("AF16", AF16_id)
   AF15_frm <- meetup_yes_RSVPs("AF15", AF15_id)
-  
-  date_fill <- function(df){
-    df 
-  }
   
   allAF_frm_rladies <- bind_rows(AF15_frm, AF16_frm, AF17_frm, AF18_frm, AF19_frm)
   
@@ -197,9 +193,9 @@ allAF_frm_weekday_penult_week <- allAF_frm %>%
          yes_year_factor = fct_rev(factor(yes_year))) %>%
   select(-yes_year, -yes_weekday)
 
-if (!github_file) {
-  write.csv(allAF_frm, paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AnalyticsForward_", todaydt, "_", AMPM, ".csv"), row.names = FALSE)
-  write.csv(allAF_frm_weekday, paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AnalyticsForward_weekday_", todaydt, "_", AMPM, ".csv"), row.names = FALSE)
+if (save_to_folder) {
+  write.csv(allAF_frm, paste0(folder_save, "AnalyticsForward_", todaydt, "_", AMPM, ".csv"), row.names = FALSE)
+  write.csv(allAF_frm_weekday, paste0(folder_save, "AnalyticsForward_", todaydt, "_", AMPM, ".csv"), row.names = FALSE)
 }
 
 p1 <- 
@@ -321,47 +317,112 @@ p5 <-
         axis.text.x = element_text(face = "bold.italic", color = "red", size = 16),
         axis.text.y = element_text(face = "bold.italic", color = "red", size = 16))
 
+grp_members <- get_members(meetupgrp_name)
 
-ggsave(p1, file = paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AF_",
-                         todaydt, "_1", AMPM, ".png"), height = 5, width = 8)
-ggsave(p2, file = paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AF_",
-                         todaydt, "_2", AMPM, ".png"), height = 5, width = 8)
-ggsave(p3, file = paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AF_",
-                         todaydt, "_3", AMPM, ".png"), height = 5, width = 8)
-ggsave(p4, file = paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AF_",
-                         todaydt, "_4", AMPM, ".png"), height = 5, width = 8)
-ggsave(p5, file = paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AF_",
-                         todaydt, "_5", AMPM, ".png"), height = 5, width = 8)
-# Stitch images for gif using Magick package
-# Use 600 x 322 for LinkedIn
-# Otherwise, 1200 x 720
-# 
-img <- image_graph(width = 1200, height = 720, res = 96)
-print(p3)
-print(p4)
-print(p5)
-print(p1)
-print(p2)
-dev.off()
+# grp_dupes <- grp_members %>% group_by(name) %>% mutate(counter = n()) 
+#                          %>% dplyr::filter(counter > 1) %>% arrange(name)
+# grp_dupes %>% select(id, name, joined, city)
+grp_members2 <- grp_members %>% 
+  mutate(joined_date = ymd(str_sub(joined, 1, 10))) %>% 
+  distinct(id, .keep_all = TRUE) %>% 
+  arrange(joined_date) %>% 
+  mutate(member_count = row_number(),
+         joined_year = year(joined_date),
+         max_year    = max(joined_year),
+         max_year_flag = case_when(
+           joined_year == max_year ~ TRUE,
+           TRUE ~ FALSE
+         ))
 
-animation <- image_animate(image_scale(img), fps = 0.25)
-image_write(animation, paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AF_",
-                              todaydt, AMPM, "_animate.gif"))
-dev.off()
+grp_plot <- hchart(grp_members2, "line", 
+                   hcaes(x = joined_date, y = member_count, 
+                         name = name, bio = bio, joined = joined)) %>%
+   # hc_tooltip(pointFormat = str_glue("<b>{grp_members2$name}</b><br />Bio: {grp_members2$bio}<br ",
+   #                                   "/>Joined Date: {grp_members2$joined_date}")) %>%
+  hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership") %>%
+  hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
+                              "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
+  hc_credits(enabled = TRUE,
+             text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
+             href = "http://rpubs.com/maraaverick/470388",
+             style = list(
+               fontSize = "14px",
+               color = "#4a4a4a")) %>% 
+   hc_add_theme(hc_theme_chalk(
+     plotOptions = list(
+       scatter = list(
+         marker = list(radius = 4,
+                       fillOpacity = 0.3)
+         ))))             
 
-img <- image_graph(width = 600, height = 322, res = 96)
-print(p3)
-print(p4)
-print(p5)
-print(p1)
-print(p2)
-dev.off()
+grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
+                              "line", 
+                              hcaes(x = joined_date, y = member_count, 
+                                    name = name, bio = bio, joined = joined)) %>%
+  # hc_tooltip(pointFormat = str_glue("<b>{grp_members2$name}</b><br />Bio: {grp_members2$bio}<br ",
+  #                                   "/>Joined Date: {grp_members2$joined_date}")) %>%
+  hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership") %>%
+  hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
+                              "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
+  hc_credits(enabled = TRUE,
+             text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
+             href = "http://rpubs.com/maraaverick/470388",
+             style = list(
+               fontSize = "14px",
+               color = "#4a4a4a")) %>% 
+  hc_add_theme(hc_theme_chalk(
+    plotOptions = list(
+      scatter = list(
+        marker = list(radius = 4,
+                      fillOpacity = 0.3)
+      ))))              
 
-animation <- image_animate(image_scale(img), fps = 0.25)
-image_write(animation, paste0("C:/Users/rick2/Documents/Rick/AnalyticsForward/AF_",
-                              todaydt, AMPM, "_LinkedIn_animate.gif"))
+if (save_to_folder) {
+  ggsave(p1, file = paste0(folder_save, "AF_",
+                           todaydt, "_1", AMPM, ".png"), height = 5, width = 8)
+  ggsave(p2, file = paste0(folder_save, "AF_",
+                           todaydt, "_2", AMPM, ".png"), height = 5, width = 8)
+  ggsave(p3, file = paste0(folder_save, "AF_",
+                           todaydt, "_3", AMPM, ".png"), height = 5, width = 8)
+  ggsave(p4, file = paste0(folder_save, "AF_",
+                           todaydt, "_4", AMPM, ".png"), height = 5, width = 8)
+  ggsave(p5, file = paste0(folder_save, "AF_",
+                           todaydt, "_5", AMPM, ".png"), height = 5, width = 8)
+  # ggsave(grp_plot, file = paste0(folder_save, "RTAgrp_",
+  #                          todaydt, "_", AMPM, ".png"), height = 5, width = 8)
+  # ggsave(grp_plot_latestyear, file = paste0(folder_save, "RTAgrpLstYr_",
+  #                          todaydt, "_", AMPM, ".png"), height = 5, width = 8)
+  # Stitch images for gif using Magick package
+  # Use 600 x 322 for LinkedIn
+  # Otherwise, 1200 x 720
+  # 
+  img <- image_graph(width = 1200, height = 720, res = 96)
+  print(p3)
+  print(p4)
+  print(p5)
+  print(p1)
+  print(p2)
+  print(grp_plot)
+  print(grp_plot_latestyear)
+  dev.off()
+  
+  animation <- image_animate(image_scale(img), fps = 0.25)
+  image_write(animation, paste0(folder_save, "AF_",
+                                todaydt, AMPM, "_animate.gif"))
+  dev.off()
+  
+  img <- image_graph(width = 600, height = 322, res = 96)
+  print(p3)
+  print(p4)
+  print(p5)
+  print(p1)
+  print(p2)
+  print(grp_plot)
+  print(grp_plot_latestyear)
+  dev.off()
+  
+  animation <- image_animate(image_scale(img), fps = 0.25)
+  image_write(animation, paste0(folder_save, "AF_",
+                                todaydt, AMPM, "_LinkedIn_animate.gif"))
+}
 
-message("Total registrations")
-allAF_frm %>% group_by(yes_year) %>% 
-  dplyr::filter(dates_yes == max(dates_yes)) %>%
-  select(id_name, yes_year, dates_yes_cumsum)

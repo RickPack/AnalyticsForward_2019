@@ -2,21 +2,24 @@
 title: "Analytics>Forward 2019"
 author: "Rick Pack"
 date: "February 27, 2019"
-output: html_document
-# output:
-#   md_document:
-#     variant: markdown_github
+# output: html_document
+output:
+  md_document:
+    variant: markdown_github
 ---
 
-```{r setup, include=FALSE, cache = TRUE}
+```{r setup, include=FALSE, cache = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-
+## Save files locally?
+save_to_folder <- TRUE
+## If TRUE, where to save?
+folder_save <- "C:/Users/rick2/Downloads/R/AnalyticsForward_2019/"
 ####################################
 ## If need to use github CSV file ##
 ## rather than use Meetup API     ##
 ####################################
 github_file <- FALSE
-github_filename <- 'C:/Users/Packr1/Documents/Personal/RTA/AF/AnalyticsForward_2019_02_27_AM.csv'
+github_filename <- 'C:/Users/rick2/Downloads/AnalyticsForward_2019/AnalyticsForward_2019_02_27_AM.csv'
 
 # Get your Meetup key by going to
   # https://secure.meetup.com/meetup_api/key/
@@ -50,4 +53,12 @@ print(p2)
 print(p3)
 print(p4)
 print(p5)
+print(grp_plot)
+print(grp_plot_latestyear)
 ```
+
+```{r tables}
+message("Total registrations")
+knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
+  dplyr::filter(dates_yes == max(dates_yes)) %>%
+  select(id_name, yes_year, dates_yes_cumsum))
