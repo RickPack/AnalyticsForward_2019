@@ -2,15 +2,42 @@
 title: "Analytics>Forward 2019"
 author: "Rick Pack"
 date: "February 27, 2019"
-# output: html_document
-output:
-  md_document:
-    variant: markdown_github
+output: html_document
+# output:
+#   md_document:
+#     variant: markdown_github
 ---
 
 ```{r setup, include=FALSE, cache = TRUE}
 knitr::opts_chunk$set(echo = FALSE)
+
+####################################
+## If need to use github CSV file ##
+## rather than use Meetup API     ##
+####################################
+github_file <- FALSE
+github_filename <- 'C:/Users/Packr1/Documents/Personal/RTA/AF/AnalyticsForward_2019_02_27_AM.csv'
+
+# Get your Meetup key by going to
+  # https://secure.meetup.com/meetup_api/key/
+  # Sys.setenv(MEETUP_KEY = "NOT_SHOWN")
+  
+  # What is the Meetup group name?
+  # Find this in the Meetup URL.
+  # For example, in https://www.meetup.com/Research-Triangle-Analysts/events/258165094/
+  # it is:
+  # 'Research-Triangle-Analysts'
+  meetupgrp_name <- 'Research-Triangle-Analysts'
+
+###################################
+## If using the API, save files  ##
+## with AM or PM (or anything)   ##
+## suffix?                       ##
+AMPM <- "PM"
+
+
 source('Meetup_RSVP_Yes_20190227.R')
+
 ```
 
 ## "Analytics>Forward" (2019) - 5th annual unconference by Research Triangle Analysts
