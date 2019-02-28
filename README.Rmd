@@ -36,7 +36,7 @@ github_filename <- 'C:/Users/rick2/Downloads/AnalyticsForward_2019/AnalyticsForw
 ## If using the API, save files  ##
 ## with AM or PM (or anything)   ##
 ## suffix?                       ##
-AMPM <- "PM"
+AMPM <- "AM"
 
 
 source('Meetup_RSVP_Yes_20190227.R')
