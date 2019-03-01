@@ -8,7 +8,7 @@ output:
     variant: markdown_github
 ---
 
-```{r setup, include=FALSE, cache = TRUE}
+```{r setup, include=FALSE, cache = TRUE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ## Save files locally?
 save_to_folder <- TRUE
@@ -58,6 +58,8 @@ source('Meetup_RSVP_Yes_latest.R')
 ```
 
 ## Charts
+
+
 ![Chart 1](af_2019-1.png)
 ![Chart 2](af_2019-2.png)
 ![Chart 3](af_2019-3.png)
@@ -76,7 +78,6 @@ source('Meetup_RSVP_Yes_latest.R')
 
 ## Total Registrations for Analytics>Forward per year
 ```{r tables}
-print(ls())
 library(dplyr)
 knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
   dplyr::filter(dates_yes == max(dates_yes)) %>%
