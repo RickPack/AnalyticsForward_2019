@@ -50,11 +50,11 @@ source('Meetup_RSVP_Yes_latest.R')
 "Pitch a talk, hear some talks" #AnalyticsForward http://bit.ly/AF2019Signup
 
 ```{r AF_2019}
-print(p1)
-print(p2)
-print(p3)
-print(p4)
-print(p5)
+# print(p1)
+# print(p2)
+# print(p3)
+# print(p4)
+# print(p5)
 ```
 
 ## Charts

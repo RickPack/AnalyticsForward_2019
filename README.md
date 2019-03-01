@@ -4,34 +4,12 @@
 "Pitch a talk, hear some talks" \#AnalyticsForward <http://bit.ly/AF2019Signup>
 
 ``` r
-print(p1)
+# print(p1)
+# print(p2)
+# print(p3)
+# print(p4)
+# print(p5)
 ```
-
-![](README_files/figure-markdown_github/AF_2019-1.png)
-
-``` r
-print(p2)
-```
-
-![](README_files/figure-markdown_github/AF_2019-2.png)
-
-``` r
-print(p3)
-```
-
-![](README_files/figure-markdown_github/AF_2019-3.png)
-
-``` r
-print(p4)
-```
-
-![](README_files/figure-markdown_github/AF_2019-4.png)
-
-``` r
-print(p5)
-```
-
-![](README_files/figure-markdown_github/AF_2019-5.png)
 
 Charts
 ------
