@@ -1,7 +1,8 @@
 ---
 title: "Analytics>Forward 2019"
 author: "Rick Pack"
-date: "February 27, 2019"
+date: "March 1, 2019"
+always_allow_html: yes
 # output: html_document
 output:
   md_document:
@@ -19,7 +20,9 @@ folder_save <- "C:/Users/rick2/Downloads/R/AnalyticsForward_2019/"
 ## rather than use Meetup API     ##
 ####################################
 github_file <- FALSE
-github_filename <- 'C:/Users/rick2/Downloads/AnalyticsForward_2019/AnalyticsForward_2019_02_27_AM.csv'
+## Notice need for raw.
+github_filename <- str_glue('https://raw.githubusercontent.com/RickPack/Analytics',
+                            'Forward_2019/master/AnalyticsForward_2019_02_28_AM.csv')
 
 # Get your Meetup key by going to
   # https://secure.meetup.com/meetup_api/key/
@@ -36,29 +39,39 @@ github_filename <- 'C:/Users/rick2/Downloads/AnalyticsForward_2019/AnalyticsForw
 ## If using the API, save files  ##
 ## with AM or PM (or anything)   ##
 ## suffix?                       ##
+###################################
 AMPM <- "AM"
 
-
-source('Meetup_RSVP_Yes_20190227.R')
+source('Meetup_RSVP_Yes_latest.R')
 
 ```
 
 ## "Analytics>Forward" (2019) - 5th annual unconference by Research Triangle Analysts
 
-Files for Analytics>Forward 2019 by Research Triangle Analysts - "Pitch a talk, hear some talks" #AnalyticsForward http://bit.ly/AF2019Signup
+"Pitch a talk, hear some talks" #AnalyticsForward http://bit.ly/AF2019Signup
 
-```{r af_2019}
+```{r AF_2019}
 print(p1)
 print(p2)
 print(p3)
 print(p4)
 print(p5)
-print(grp_plot)
-print(grp_plot_latestyear)
 ```
 
+
+```{r highchart1}
+htmltools::tagList(grp_plot)
+```
+
+
+```{r highchart2}
+htmltools::tagList(grp_plot_latestyear)
+```
+
+## Total Registrations for Analytics>Forward per year
 ```{r tables}
-message("Total registrations")
+library(dplyr)
 knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
   dplyr::filter(dates_yes == max(dates_yes)) %>%
   select(id_name, yes_year, dates_yes_cumsum))
+```

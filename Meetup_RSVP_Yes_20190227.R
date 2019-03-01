@@ -129,9 +129,9 @@ if (!github_file) {
 }
 
 if (github_file) {
-  allAF_frm <- readr::read_csv(github_filename) %>%
-    mutate(yes_year_factor = fct_reorder(as.factor(yes_year), relative_today_cumsum, 
-                                         .desc = TRUE))
+  raw_github <- RCurl::getURL(github_filename)
+  allAF_frm  <- read.csv(text = raw_github) %>%
+    rename(yes_year = yes_year_factor)
   
   today_days_to_event      <- allAF_frm %>%
     dplyr::filter(yes_year == max(yes_year)) %>%
@@ -337,8 +337,7 @@ grp_members2 <- grp_members %>%
 grp_plot <- hchart(grp_members2, "line", 
                    hcaes(x = joined_date, y = member_count, 
                          name = name, bio = bio, joined = joined)) %>%
-   # hc_tooltip(pointFormat = str_glue("<b>{grp_members2$name}</b><br />Bio: {grp_members2$bio}<br ",
-   #                                   "/>Joined Date: {grp_members2$joined_date}")) %>%
+  hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>% 
   hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership") %>%
   hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
                               "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
@@ -388,11 +387,14 @@ if (save_to_folder) {
                            todaydt, "_4", AMPM, ".png"), height = 5, width = 8)
   ggsave(p5, file = paste0(folder_save, "AF_",
                            todaydt, "_5", AMPM, ".png"), height = 5, width = 8)
-  # ggsave(grp_plot, file = paste0(folder_save, "RTAgrp_",
-  #                          todaydt, "_", AMPM, ".png"), height = 5, width = 8)
-  # ggsave(grp_plot_latestyear, file = paste0(folder_save, "RTAgrpLstYr_",
-  #                          todaydt, "_", AMPM, ".png"), height = 5, width = 8)
-  # Stitch images for gif using Magick package
+  ## ggsave fails on higchart htmlwidget object
+  saveWidget(grp_plot, file = paste0("RTAgrp_", todaydt, "_", AMPM, ".png"), 
+             height = 5, width = 8, 
+             selfcontained = FALSE)
+  saveWidget(grp_plot, file = paste0("RTAgrpLstYr_", todaydt, "_", AMPM, ".png"), 
+             height = 5, width = 8, 
+             selfcontained = FALSE)
+  
   # Use 600 x 322 for LinkedIn
   # Otherwise, 1200 x 720
   # 
@@ -402,8 +404,6 @@ if (save_to_folder) {
   print(p5)
   print(p1)
   print(p2)
-  print(grp_plot)
-  print(grp_plot_latestyear)
   dev.off()
   
   animation <- image_animate(image_scale(img), fps = 0.25)
@@ -417,8 +417,6 @@ if (save_to_folder) {
   print(p5)
   print(p1)
   print(p2)
-  print(grp_plot)
-  print(grp_plot_latestyear)
   dev.off()
   
   animation <- image_animate(image_scale(img), fps = 0.25)

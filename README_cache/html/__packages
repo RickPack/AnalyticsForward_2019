@@ -1,10 +1,4 @@
 base
-methods
-datasets
-utils
-grDevices
-graphics
-stats
 httr
 tidyverse
 ggplot2
@@ -20,3 +14,6 @@ meetupr
 lubridate
 magick
 directlabels
+highcharter
+htmlwidgets
+plotly
