@@ -57,14 +57,21 @@ print(p4)
 print(p5)
 ```
 
+## Charts
+![Chart 1](af_2019-1.png)
+![Chart 2](af_2019-2.png)
+![Chart 3](af_2019-3.png)
+![Chart 4](af_2019-4.png)
+![Chart 5](af_2019-5.png)
+
 
 ```{r highchart1}
-print(grp_plot)
+#print(grp_plot)
 ```
 
 
 ```{r highchart2}
-print(grp_plot_latestyear)
+#print(grp_plot_latestyear)
 ```
 
 ## Total Registrations for Analytics>Forward per year
