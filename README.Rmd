@@ -59,16 +59,17 @@ print(p5)
 
 
 ```{r highchart1}
-htmltools::tagList(grp_plot)
+print(grp_plot)
 ```
 
 
 ```{r highchart2}
-htmltools::tagList(grp_plot_latestyear)
+print(grp_plot_latestyear)
 ```
 
 ## Total Registrations for Analytics>Forward per year
 ```{r tables}
+print(ls())
 library(dplyr)
 knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
   dplyr::filter(dates_yes == max(dates_yes)) %>%
