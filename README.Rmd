@@ -2,7 +2,6 @@
 title: "Analytics>Forward 2019"
 author: "Rick Pack"
 date: "March 1, 2019"
-always_allow_html: yes
 # output: html_document
 output:
   md_document:
