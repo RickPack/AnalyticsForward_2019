@@ -61,7 +61,7 @@ if (!github_file) {
   # high Analytics>Forward vote-earner, Mark Hutchinson
   AF_events            <- AF_events %>% dplyr::filter(!grepl("PREPARATION", toupper(name)))
   # local_date loads as a date column
-  AF_events_dates_yes  <- AF_events %>% select(id, local_date, created) %>%
+  AF_events_dates_yes  <- AF_events %>% select(id, name, local_date, created) %>%
     # strip off time and only keep date
     mutate(created = str_sub(created, 1, 10)) %>%
     # renaming columns from Meetup API for easier identification
@@ -78,7 +78,7 @@ if (!github_file) {
   # will only contain non-NA values for group_by columns
   allAF_frm <- left_join(allAF_frm_rladies, AF_events_dates_yes) %>%
     group_by(id_name, event_date, creation_date_per_AF_year,
-             id, yes_year) %>%
+             id, name, yes_year) %>%
     mutate(max_date_per_AF_year = ymd(max(dates_yes))) %>%
     # https://blog.exploratory.io/populating-missing-dates-with-complete-and-fill-functions-in-r-and-exploratory-79f2a321e6b5
     # Notice use of unique because seq.Date needs one value for 'from' and 'to' arguments
@@ -318,6 +318,7 @@ grp_members <- get_members(meetupgrp_name)
 # grp_dupes <- grp_members %>% group_by(name) %>% mutate(counter = n()) 
 #                          %>% dplyr::filter(counter > 1) %>% arrange(name)
 # grp_dupes %>% select(id, name, joined, city)
+
 grp_members2 <- grp_members %>% 
   mutate(joined_date = ymd(str_sub(joined, 1, 10))) %>% 
   distinct(id, .keep_all = TRUE) %>% 
@@ -330,8 +331,15 @@ grp_members2 <- grp_members %>%
            TRUE ~ FALSE
          )) %>% 
   # a repeat found for some reason
-  distinct(name, bio, joined_date, .keep_all = TRUE)
-
+  distinct(name, bio, joined_date, .keep_all = TRUE) %>% 
+  left_join(., allAF_frm %>% 
+                select(dates_yes, id, dates_yes_cumsum) %>% 
+                dplyr::filter(dates_yes_cumsum > 0) %>% 
+                mutate(AF_active = TRUE,
+                       id = as.integer(id)) %>% 
+                select(-dates_yes_cumsum), 
+            by = "id") 
+                        
 grp_plot <- hchart(grp_members2, "line", 
                    hcaes(x = joined_date, y = member_count, 
                          name = name, bio = bio, joined = joined)) %>%
@@ -371,21 +379,23 @@ grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
                       fillOpacity = 0.3)
       ))))         
 
+# Thanks http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
+# grp_plot_geomcount <-
+#   ggplot(grp_members2, aes(joined_date, member_count, shape = factor(AF_active))) +
+#   ggtitle("Research Triangle Anlaysts [Meetup group] membership over time",
+#           subtitle = "Impact of Active Analytics>Forward [can register] Event? ") +
+#   geom_point(aes(colour = factor(AF_active)))
+
 if (save_to_folder) {
-  ggsave(p1, file = paste0(folder_save, "AF_",
-                           todaydt, "_1", AMPM, ".png"), height = 5, width = 8)
-  ggsave(p2, file = paste0(folder_save, "AF_",
-                           todaydt, "_2", AMPM, ".png"), height = 5, width = 8)
-  ggsave(p3, file = paste0(folder_save, "AF_",
-                           todaydt, "_3", AMPM, ".png"), height = 5, width = 8)
-  ggsave(p4, file = paste0(folder_save, "AF_",
-                           todaydt, "_4", AMPM, ".png"), height = 5, width = 8)
-  ggsave(p5, file = paste0(folder_save, "AF_",
-                           todaydt, "_5", AMPM, ".png"), height = 5, width = 8)
+  ggsave(p1, file = "af_2019-1.png", height = 5, width = 8)
+  ggsave(p2, file = "af_2019-2.png", height = 5, width = 8)
+  ggsave(p3, file = "af_2019-3.png", height = 5, width = 8)
+  ggsave(p4, file = "af_2019-4.png", height = 5, width = 8)
+  ggsave(p5, file = "af_2019-5.png", height = 5, width = 8)
   ## ggsave fails on higchart htmlwidget object
-  saveWidget(grp_plot, file = paste0("RTAgrp_", todaydt, "_", AMPM, ".png"), 
+  saveWidget(grp_plot, file = paste0("RTAgrp.html"), 
              selfcontained = FALSE)
-  saveWidget(grp_plot, file = paste0("RTAgrpLstYr_", todaydt, "_", AMPM, ".png"), 
+  saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"), 
              selfcontained = FALSE)
   
   # Use 600 x 322 for LinkedIn

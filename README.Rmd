@@ -1,16 +1,16 @@
 ---
 title: "Analytics>Forward 2019"
-author: "Rick Pack"
-date: "March 1, 2019"
+author: "Rick Pack (Research Triangle Analysts)"
+date: "March 2, 2019"
 # output: html_document
 output:
   md_document:
     variant: markdown_github
 ---
 
-```{r setup, include=FALSE, cache = TRUE, echo = FALSE}
+```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-## Save files locally?
+## Save images and CSV data files locally?
 save_to_folder <- TRUE
 ## If TRUE, where to save?
 folder_save <- "C:/Users/rick2/Downloads/R/AnalyticsForward_2019/"
@@ -20,7 +20,8 @@ folder_save <- "C:/Users/rick2/Downloads/R/AnalyticsForward_2019/"
 ####################################
 github_file <- FALSE
 ## Notice need for raw.
-github_filename <- str_glue('https://raw.githubusercontent.com/RickPack/Analytics',
+github_filename <- stringr::str_glue(
+                            'https://raw.githubusercontent.com/RickPack/Analytics',
                             'Forward_2019/master/AnalyticsForward_2019_02_28_AM.csv')
 
 # Get your Meetup key by going to
@@ -45,17 +46,18 @@ source('Meetup_RSVP_Yes_latest.R')
 
 ```
 
-## "Analytics>Forward" (2019) - 5th annual unconference by Research Triangle Analysts
+# "Analytics>Forward" (2019) - 5th annual unconference by Research Triangle Analysts
 
 "Pitch a talk, hear some talks" #AnalyticsForward http://bit.ly/AF2019Signup
 
-```{r AF_2019}
-# print(p1)
-# print(p2)
-# print(p3)
-# print(p4)
-# print(p5)
-```
+This page's data visualizations will be updated daily.
+
+They primarily depict Meetup registrations for Analytics>Forward, with the purpose of indicating sell-out potential and to help the planning comittee with elements including the catering order.
+
+Thank you to R-Ladies for the meetupr package.
+
+## Keynote
+![Marketplace.org article - Jordan Meyer (Zillow)](Marketplace_Zillow_JordanMeyer.png)
 
 ## Charts
 
@@ -81,5 +83,5 @@ source('Meetup_RSVP_Yes_latest.R')
 library(dplyr)
 knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
   dplyr::filter(dates_yes == max(dates_yes)) %>%
-  select(id_name, yes_year, dates_yes_cumsum))
+  select(name, yes_year, dates_yes_cumsum))
 ```
