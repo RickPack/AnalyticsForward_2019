@@ -1,7 +1,7 @@
 ---
 title: "Analytics>Forward 2019"
 author: "Rick Pack (Research Triangle Analysts)"
-date: "March 2, 2019"
+date: "March 3, 2019"
 # output: html_document
 output:
   md_document:
@@ -10,6 +10,11 @@ output:
 
 ```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+
+# Get your Meetup key by going to
+  # https://secure.meetup.com/meetup_api/key/
+# Sys.setenv(MEETUP_KEY = "NOT_SHOWN")
+
 ## Save images and CSV data files locally?
 save_to_folder <- TRUE
 ## If TRUE, where to save?
@@ -23,10 +28,6 @@ github_file <- FALSE
 github_filename <- stringr::str_glue(
                             'https://raw.githubusercontent.com/RickPack/Analytics',
                             'Forward_2019/master/AnalyticsForward_2019_02_28_AM.csv')
-
-# Get your Meetup key by going to
-  # https://secure.meetup.com/meetup_api/key/
-  # Sys.setenv(MEETUP_KEY = "NOT_SHOWN")
   
   # What is the Meetup group name?
   # Find this in the Meetup URL.
