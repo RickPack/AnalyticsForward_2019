@@ -9,7 +9,16 @@ library(highcharter)
 library(htmlwidgets)
 library(plotly)
 
-
+## Notice need for raw.
+github_filename1 <- stringr::str_glue(
+  'https://raw.githubusercontent.com/RickPack/Analytics',
+  'Forward_2019/master/AnalyticsForward_Registrations.csv')
+github_filename2 <- stringr::str_glue(
+  'https://raw.githubusercontent.com/RickPack/Analytics',
+  'Forward_2019/master/AnalyticsForward_Reg_DayofWeek.csv')
+##########################################
+##   START of non-Github download code  ##     
+##########################################
 if (!github_file) {
   todaydt <- str_replace_all(as.character(Sys.Date()), "-","_")
   
@@ -128,16 +137,6 @@ if (!github_file) {
     left_join(., today_relative_yes_count) %>%
     mutate(yes_year_factor = fct_reorder(as.factor(yes_year), relative_today_cumsum, 
                                          .desc = TRUE))
-  if (save_to_folder) {
-    write.csv(allAF_frm, paste0(folder_save, "AnalyticsForward_", todaydt, "_", AMPM, ".csv"), row.names = FALSE)
-  }
-}
-
-if (github_file) {
-  raw_github <- RCurl::getURL(github_filename)
-  allAF_frm  <- read.csv(text = raw_github) %>%
-    rename(yes_year = yes_year_factor)
-}
 
 allAF_frm_weekday <- allAF_frm %>%
   mutate(yes_weekday = weekdays(ymd(dates_yes))) %>%
@@ -154,8 +153,27 @@ allAF_frm_weekday <- allAF_frm %>%
          yes_year_factor = fct_rev(factor(yes_year))) %>%
   select(-yes_year, -yes_weekday)
 if (save_to_folder) {
-  write.csv(allAF_frm_weekday, paste0(folder_save, "AnalyticsForward_", todaydt, "_", AMPM, ".csv"), row.names = FALSE)
+  write.csv(allAF_frm, paste0(folder_save, "AnalyticsForward_Registrations.csv"), row.names = FALSE)
+  write.csv(allAF_frm_weekday, paste0(folder_save, "AnalyticsForward_Reg_DayofWeek.csv"), row.names = FALSE)
+ }
 }
+##########################################
+##   END of non-Github download code    ##     
+##########################################
+
+if (github_file) {
+  raw_github1 <- RCurl::getURL(github_filename)
+  allAF_frm  <- read.csv(text = raw_github1) %>%
+    rename(yes_year = yes_year_factor)
+  raw_github2 <- RCurl::getURL(github_filename)
+  allAF_frm_weekday  <- read.csv(text = raw_github2) %>%
+    mutate(yes_weekday_factor  = factor(yes_weekday_factor, levels = 
+                                          c("Monday", "Tuesday", "Wednesday",
+                                            "Thursday", "Friday" ,"Saturday", "Sunday"),
+                                        ordered = TRUE),
+           yes_year_factor = fct_rev(factor(yes_year)))
+}
+
 # same as above but exclude the final week, which is when
 # registrations dramatically increase
 # last day of last captured week is Saturday
@@ -426,8 +444,7 @@ if (save_to_folder) {
   dev.off()
   
   animation <- image_animate(image_scale(img), fps = 0.25)
-  image_write(animation, paste0(folder_save, "AF_",
-                                todaydt, AMPM, "_animate.gif"))
+  image_write(animation, paste0(folder_save, "AF_animate.gif"))
   dev.off()
   
   img <- image_graph(width = 600, height = 322, res = 96)
@@ -439,7 +456,6 @@ if (save_to_folder) {
   dev.off()
   
   animation <- image_animate(image_scale(img), fps = 0.25)
-  image_write(animation, paste0(folder_save, "AF_",
-                                todaydt, AMPM, "_LinkedIn_animate.gif"))
+  image_write(animation, paste0(folder_save, "AF_LinkedIn_animate.gif"))
 }
 

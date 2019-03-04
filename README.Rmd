@@ -11,16 +11,13 @@ output:
 ```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
-# Get your Meetup key by going to
-  # https://secure.meetup.com/meetup_api/key/
-# Sys.setenv(MEETUP_KEY = "NOT_SHOWN")
-
-##########################################
-## If using the API, save files with    ##
-## with AM or PM (or anything)  suffix? ##
-## suffix?                              ##
-##########################################
-AMPM <- "PM"
+################################################
+## Get your Meetup key by going to            ##
+## https://secure.meetup.com/meetup_api/key/  ##
+## !!!    Then must run the line below!  !!!  ##
+################################################
+## Sys.setenv(MEETUP_KEY = "NOT_SHOWN")       ##
+################################################
 
 ## Save images and CSV data files locally?
 save_to_folder <- TRUE
@@ -31,17 +28,13 @@ folder_save <- "C:/Users/rick2/Downloads/R/AnalyticsForward_2019/"
 ## rather than use Meetup API     ##
 ####################################
 github_file <- FALSE
-## Notice need for raw.
-github_filename <- stringr::str_glue(
-                            'https://raw.githubusercontent.com/RickPack/Analytics',
-                            'Forward_2019/master/AnalyticsForward_2019_02_28_AM.csv')
-  
-  # What is the Meetup group name?
-  # Find this in the Meetup URL.
-  # For example, in https://www.meetup.com/Research-Triangle-Analysts/events/258165094/
-  # it is:
-  # 'Research-Triangle-Analysts'
-  meetupgrp_name <- 'Research-Triangle-Analysts'
+
+# What is the Meetup group name?
+# Find this in the Meetup URL.
+# For example, in https://www.meetup.com/Research-Triangle-Analysts/events/258165094/
+# it is:
+# 'Research-Triangle-Analysts'
+meetupgrp_name <- 'Research-Triangle-Analysts'
 
 
 source('Meetup_RSVP_Yes_latest.R')
