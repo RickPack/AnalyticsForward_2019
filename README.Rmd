@@ -11,6 +11,8 @@ output:
 ```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
+windowsFonts(Times = windowsFont("Paltino Linotype"))
+
 ################################################
 ## Get your Meetup key by going to            ##
 ## https://secure.meetup.com/meetup_api/key/  ##
@@ -38,6 +40,7 @@ meetupgrp_name <- 'Research-Triangle-Analysts'
 
 
 source('Meetup_RSVP_Yes_latest.R')
+allAF_frm <- Meetup_RSVP_Yes_Count(save_to_folder, github_file, meetupgrp_name, folder_save)
 
 ```
 
@@ -79,5 +82,6 @@ library(dplyr)
 print(paste("As of ", Sys.time()))
 knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
   dplyr::filter(dates_yes == max(dates_yes)) %>%
-  select(name, yes_year, dates_yes_cumsum))
+  rename(Year = yes_year, Registration_Count = dates_yes_cumsum) %>% 
+  select(name, Year, Registration_Count))
 ```
