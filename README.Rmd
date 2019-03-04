@@ -8,7 +8,7 @@ output:
     variant: markdown_github
 ---
 
-```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
+```{r setup, include=FALSE, cache = TRUE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
 windowsFonts(Times = windowsFont("Paltino Linotype"))

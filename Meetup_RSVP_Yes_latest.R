@@ -328,7 +328,7 @@ p1 <-
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)"),
           subtitle = str_glue("Keynote by Jordan Meyer\n$1M Zillow datascience (Kaggle) winner\n",
                               "Data as of ", as.character(Sys.time()), ": ",
-                              as.numeric(today_days_to_event), " days remaining\nChart 1 of 5")) +
+                              as.numeric(today_days_to_event), " days remaining\nChart 1 of 7")) +
   directlabels::geom_dl(aes(label = yes_year), method = list("last.points",rot = -50)) +
   theme(plot.title = element_text(hjust = 0.5, color = '#EEEEEE',
                                   lineheight = .8, face = "bold",
@@ -363,7 +363,7 @@ p2 <-
   ylab("YES (will attend) RSVPs") +
   labs(colour = "Year") + 
   ggtitle(label = paste0("Research Triangle Analysts 'Analytics>Forward' as of\n",
-                         Sys.Date(), "\nChart 2 of 5"),
+                         Sys.Date(), "\nChart 2 of 7"),
           subtitle = str_glue("Zillow Data Science (Kaggle) winner, Jordan Meyer,", 
                               " keynoting March 9, 2019\n",
                               as.numeric(today_days_to_event), " days remaining")) +
@@ -393,7 +393,7 @@ p3 <-
   coord_flip() + 
   scale_fill_viridis_d() +
   ggtitle(label = paste0("Research Triangle Analysts 'Analytics>Forward' as of\n",
-                         Sys.Date(), "\nChart 3 of 5"),
+                         Sys.Date(), "\nChart 3 of 7"),
           subtitle = str_glue("Zillow Data Science (Kaggle) winner, Jordan Meyer,", 
                               " keynoting March 9, 2019\nAll weeks shown.\n",
                               as.numeric(today_days_to_event), " days remaining")) +
@@ -416,7 +416,7 @@ p4 <-
   coord_flip() + 
   scale_fill_viridis_d() +
   ggtitle(label = paste0("Research Triangle Analysts 'Analytics>Forward' as of\n",
-                         Sys.Date(), "\nChart 4 of 5"),
+                         Sys.Date(), "\nChart 4 of 7"),
           subtitle = str_glue("Zillow Data Science (Kaggle) winner, Jordan Meyer,", 
                               " keynoting March 9, 2019\nEXCLUDES the week of the event.\n",
                               as.numeric(today_days_to_event), " days remaining")) +
@@ -437,7 +437,7 @@ p5 <-
   coord_flip() + 
   scale_fill_viridis_d() +
   ggtitle(label = paste0("Research Triangle Analysts 'Analytics>Forward' as of\n",
-                         Sys.Date(), "\nChart 5 of 5"),
+                         Sys.Date(), "\nChart 5 of 7"),
           subtitle = str_glue("Zillow Data Science (Kaggle) winner, Jordan Meyer,", 
                               " keynoting March 9, 2019\nONLY the week of the event",
                               "(2 ppl in 2017 registered early AM, Saturday).\n",
@@ -455,7 +455,8 @@ p6 <- ggplot(allAF_frm_dt_day,
   guides(fill = guide_legend(title="Total\nRegistrations")) +
   theme_bw() + theme_minimal() + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
-                           "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)"),
+                           "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
+                           "Chart 6 of 7"),
           subtitle = str_glue("Depicting when weeks until event = current weeks until event (", 
                               weeks_until_event, ")")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
@@ -469,7 +470,8 @@ p7 <- ggplot(allAF_frm_dt_day_currentweek,
   guides(fill = guide_legend(title="Total\nRegistrations")) +
   theme_bw() + theme_minimal() + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
-                           "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)"),
+                           "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
+                           "Chart 7 of 7"),
           subtitle = str_glue("Depicting when weeks until event = current weeks until event (", 
                               weeks_until_event, ")")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
