@@ -156,10 +156,10 @@ allAF_frm_weekday <- allAF_frm %>%
 if (save_to_folder) {
   write.csv(allAF_frm_weekday, paste0(folder_save, "AnalyticsForward_", todaydt, "_", AMPM, ".csv"), row.names = FALSE)
 }
-# same as above but exclude the last week, which is when
+# same as above but exclude the final week, which is when
 # registrations dramatically increase
 # last day of last captured week is Saturday
-allAF_frm_weekday_not_lastweek <- allAF_frm %>%
+allAF_frm_weekday_not_finalweek <- allAF_frm %>%
   dplyr::filter(days_to_event > 6) %>%
   mutate(yes_weekday = weekdays(ymd(dates_yes))) %>%
   group_by(yes_year, yes_weekday) %>%
@@ -180,6 +180,22 @@ allAF_frm_weekday_not_lastweek <- allAF_frm %>%
 # Last day of last captured week is Saturday
 allAF_frm_weekday_penult_week <- allAF_frm %>%
   dplyr::filter(days_to_event > 6 & days_to_event < 14) %>%
+  mutate(yes_weekday = weekdays(ymd(dates_yes))) %>%
+  group_by(yes_year, yes_weekday) %>%
+  summarise(dates_yes_cumsum_week = sum(rsvp_yes_count)) %>%
+  ungroup() %>%
+  mutate(yes_weekday_factor  = factor(yes_weekday, levels = 
+                                        c("Monday", "Tuesday", "Wednesday",
+                                          "Thursday", "Friday" ,"Saturday", "Sunday"),
+                                      ordered = TRUE),
+         # forcats::fct_rev used to reverse order 
+         # (later year will come first)
+         # so in stacked bar Chart later year is on far-right
+         yes_year_factor = fct_rev(factor(yes_year))) %>%
+  select(-yes_year, -yes_weekday)
+
+allAF_frm_weekday_final_week <- allAF_frm %>%
+  dplyr::filter(days_to_event < 7) %>%
   mutate(yes_weekday = weekdays(ymd(dates_yes))) %>%
   group_by(yes_year, yes_weekday) %>%
   summarise(dates_yes_cumsum_week = sum(rsvp_yes_count)) %>%
@@ -272,7 +288,7 @@ p3 <-
         axis.text.y = element_text(face = "bold.italic", color = "red", size = 16))
 
 p4 <-
-  ggplot(data = allAF_frm_weekday_not_lastweek,
+  ggplot(data = allAF_frm_weekday_not_finalweek,
          aes(y = dates_yes_cumsum_week,
              x = yes_weekday_factor,
              fill = yes_year_factor)) +
@@ -293,7 +309,7 @@ p4 <-
         axis.text.y = element_text(face = "bold.italic", color = "red", size = 16))
 
 p5 <-
-  ggplot(data = allAF_frm_weekday_penult_week,
+  ggplot(data = allAF_frm_weekday_final_week,
          aes(y = dates_yes_cumsum_week,
              x = yes_weekday_factor,
              fill = yes_year_factor)) +
@@ -306,7 +322,7 @@ p5 <-
   ggtitle(label = paste0("Research Triangle Analysts 'Analytics>Forward' as of\n",
                          Sys.Date(), "\nChart 5 of 5"),
           subtitle = str_glue("Zillow Data Science (Kaggle) winner, Jordan Meyer", 
-                              " keynoting March 9, 2019\nONLY the week prior to the event.\n",
+                              " keynoting March 9, 2019\nONLY the week of the event.\n",
                               as.numeric(today_days_to_event), " days remaining")) +
   theme(plot.title = element_text(hjust = 0.5, size = 16, lineheight = .8, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),

@@ -20,7 +20,7 @@ knitr::opts_chunk$set(echo = FALSE)
 ## with AM or PM (or anything)  suffix? ##
 ## suffix?                              ##
 ##########################################
-AMPM <- "AM"
+AMPM <- "PM"
 
 ## Save images and CSV data files locally?
 save_to_folder <- TRUE
