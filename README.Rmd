@@ -15,6 +15,13 @@ knitr::opts_chunk$set(echo = FALSE)
   # https://secure.meetup.com/meetup_api/key/
 # Sys.setenv(MEETUP_KEY = "NOT_SHOWN")
 
+##########################################
+## If using the API, save files with    ##
+## with AM or PM (or anything)  suffix? ##
+## suffix?                              ##
+##########################################
+AMPM <- "AM"
+
 ## Save images and CSV data files locally?
 save_to_folder <- TRUE
 ## If TRUE, where to save?
@@ -36,12 +43,6 @@ github_filename <- stringr::str_glue(
   # 'Research-Triangle-Analysts'
   meetupgrp_name <- 'Research-Triangle-Analysts'
 
-###################################
-## If using the API, save files  ##
-## with AM or PM (or anything)   ##
-## suffix?                       ##
-###################################
-AMPM <- "AM"
 
 source('Meetup_RSVP_Yes_latest.R')
 
@@ -82,6 +83,7 @@ Thank you to R-Ladies for the meetupr package.
 ## Total Registrations for Analytics>Forward per year
 ```{r tables}
 library(dplyr)
+print(paste("As of ", Sys.time()))
 knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
   dplyr::filter(dates_yes == max(dates_yes)) %>%
   select(name, yes_year, dates_yes_cumsum))
