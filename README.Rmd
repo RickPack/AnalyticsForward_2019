@@ -8,10 +8,8 @@ output:
     variant: markdown_github
 ---
 
-```{r setup, include=FALSE, cache = TRUE, echo = FALSE}
+```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-
-windowsFonts(Times = windowsFont("Paltino Linotype"))
 
 ################################################
 ## Get your Meetup key by going to            ##
@@ -59,12 +57,13 @@ Thank you to R-Ladies for the meetupr package.
 
 ## Charts
 
-
 ![Chart 1](af_2019-1.png)
 ![Chart 2](af_2019-2.png)
 ![Chart 3](af_2019-3.png)
 ![Chart 4](af_2019-4.png)
 ![Chart 5](af_2019-5.png)
+![Chart 6](af_2019-6.png)
+![Chart 7](af_2019-7.png)
 
 
 ```{r highchart1}
@@ -80,8 +79,8 @@ Thank you to R-Ladies for the meetupr package.
 ```{r tables}
 library(dplyr)
 print(paste("As of ", Sys.time()))
-knitr::kable(allAF_frm %>% group_by(yes_year) %>% 
+knitr::kable(allAF_frm %>% group_by(yes_year_factor) %>% 
   dplyr::filter(dates_yes == max(dates_yes)) %>%
-  rename(Year = yes_year, Registration_Count = dates_yes_cumsum) %>% 
+  rename(Year = yes_year_factor, Registration_Count = dates_yes_cumsum) %>% 
   select(name, Year, Registration_Count))
 ```

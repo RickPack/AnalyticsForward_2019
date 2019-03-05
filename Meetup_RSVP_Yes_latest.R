@@ -302,7 +302,6 @@ p1 <-
                                  expand = unit(0.02, 'mm'),
                                  label.colour = "#fc8d62",
                                  label.fontsize = 16, label.fill = "black",
-                                 label.family = "Palatino Linotype", 
                                  label.buffer = unit(1, 'mm'),
                                  con.colour = "white", con.size = 0.3,
                                  con.type = "elbow") +
@@ -311,34 +310,27 @@ p1 <-
                          y = max_registrations,
                          yend = max_registrations),
                          color = "white",
-                         size = 2
+                         size = 1
                          ) +
-  geom_text(inherit.aes = FALSE, color = "white",
-            aes(x = min(allAF_frm$dates_yes_otheryear) + 50, 
-                y = max_registrations + 7,
-            label = paste0("Record registrations = ", max_registrations))) +
-  annotate("text", label = paste0("Record registrations = ", max_registrations),
-           x = min(allAF_frm$dates_yes_otheryear) + 45, 
-           y = max_registrations + 10, hjust = 0.5,
-           color = "yellow") +
   xlab("Date") +
   ylab("YES (will attend) RSVPs") +
   labs(colour = "Year") + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)"),
-          subtitle = str_glue("Keynote by Jordan Meyer\n$1M Zillow datascience (Kaggle) winner\n",
+          subtitle = str_glue("Keynote by Jordan Meyer: $1M Zillow datascience (Kaggle) winner\n",
                               "Data as of ", as.character(Sys.time()), ": ",
                               as.numeric(today_days_to_event), " days remaining\nChart 1 of 7")) +
-  directlabels::geom_dl(aes(label = yes_year), method = list("last.points",rot = -50)) +
+  directlabels::geom_dl(aes(label = yes_year), 
+                        method = list("last.points", rot = -50, cex = 2)) +
   theme(plot.title = element_text(hjust = 0.5, color = '#EEEEEE',
                                   lineheight = .8, face = "bold",
                                   size = 26),
         plot.subtitle = element_text(hjust = 0.5, color = '#EEEEEE',
-                                     size = 14),
-        axis.text.x = element_text(face = "bold.italic", color = "#EEEEEE", size = 16),
-        axis.text.y = element_text(face = "bold.italic", color = "#EEEEEE", size = 16),
+                                     size = 20),
+        axis.text.x = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
+        axis.text.y = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
         legend.position = "none",
-        text = element_text(family = 'Gill Sans MT', size = 14, color = '#EEEEEE'),
+        text = element_text(family = 'Gill Sans MT', size = 13, color = '#EEEEEE'),
         panel.background = element_rect(fill = '#333333'),
         plot.background = element_rect(fill = '#333333'),
         panel.grid = element_blank(),
@@ -347,6 +339,11 @@ p1 <-
   labs(colour = "Year") + 
   # http://colorbrewer2.org/#type=qualitative&scheme=Set2&n=5
   scale_colour_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854")) +
+  geom_text(inherit.aes = FALSE, color = "white",
+            aes(x = min(allAF_frm$dates_yes_otheryear) + 50, 
+                y = max_registrations + 10,
+                label = paste0("Record registrations = ", max_registrations)),
+                size = 08) +
   NULL
 
 # annotate("text", x = ymd('2020-02-12'), y = 90,
@@ -401,8 +398,6 @@ p3 <-
         plot.subtitle = element_text(hjust = 0.5, size = 12),
         axis.text.x = element_text(face = "bold.italic", color = "red", size = 16),
         axis.text.y = element_text(face = "bold.italic", color = "red", size = 16))
-
-browser()
   
 p4 <-
   ggplot(data = allAF_frm_weekday_not_finalweek,
@@ -456,9 +451,7 @@ p6 <- ggplot(allAF_frm_dt_day,
   theme_bw() + theme_minimal() + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
-                           "Chart 6 of 7"),
-          subtitle = str_glue("Depicting when weeks until event = current weeks until event (", 
-                              weeks_until_event, ")")) +
+                           "Chart 6 of 7")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
 
@@ -472,7 +465,7 @@ p7 <- ggplot(allAF_frm_dt_day_currentweek,
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
                            "Chart 7 of 7"),
-          subtitle = str_glue("Depicting when weeks until event = current weeks until event (", 
+          subtitle = str_glue("Depicting only when weeks until event = current weeks until event (", 
                               weeks_until_event, ")")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
   theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
@@ -551,50 +544,37 @@ grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
 #   geom_point(aes(colour = factor(AF_active)))
 
 if (save_to_folder) {
-  ggsave(p1, file = "af_2019-1.png", height = 5, width = 8)
-  ggsave(p2, file = "af_2019-2.png", height = 5, width = 8)
-  ggsave(p3, file = "af_2019-3.png", height = 5, width = 8)
-  ggsave(p4, file = "af_2019-4.png", height = 5, width = 8)
-  ggsave(p5, file = "af_2019-5.png", height = 5, width = 8)
+  ggsave(p1, file = "af_2019-1.png", dpi = 72, width = 12, height = 5)
+  ggsave(p2, file = "af_2019-2.png", dpi = 72, width = 12, height = 5)
+  ggsave(p3, file = "af_2019-3.png", dpi = 72, width = 12, height = 5)
+  ggsave(p4, file = "af_2019-4.png", dpi = 72, width = 12, height = 5)
+  ggsave(p5, file = "af_2019-5.png", dpi = 72, width = 12, height = 5)
+  ggsave(p6, file = "af_2019-6.png", dpi = 72, width = 12, height = 5)
+  ggsave(p7, file = "af_2019-7.png", dpi = 72, width = 12, height = 5)
+#  cowplot::save_plot("af_2019-1.png", p1)
+  intro_image <- magick::image_read('Marketplace_Zillow_JordanMeyer.png', strip = TRUE) %>% 
+                 image_scale("650x420") %>% 
+                 image_annotate(str_glue("Stan Humphries, Zillow chief analytics officer, ",
+                                "and Jordan Meyer of Raleigh\n
+                                [Marketplace.org: 'What does it take to make a home estimate more ",
+                                "accurate?'"),
+                                size = 20, gravity = "northwest", color = "blue")
+  p1_image    <- image_read("af_2019-1.png") 
+  p2_image    <- image_read("af_2019-2.png") 
+  p3_image    <- image_read("af_2019-3.png") 
+  p4_image    <- image_read("af_2019-4.png") 
+  p5_image    <- image_read("af_2019-5.png") 
+  p6_image    <- image_read("af_2019-6.png") 
+  p7_image    <- image_read("af_2019-7.png") 
+  img <- c(p1_image, intro_image, p2_image, p3_image,
+           p4_image, p5_image, p6_image, p7_image)
+  animate1 <- image_animate(img, fps = 0.25, dispose = "previous")
+  image_write(animate1, "AF_animate.gif")
   ## ggsave fails on higchart htmlwidget object
   saveWidget(grp_plot, file = paste0("RTAgrp.html"), 
              selfcontained = FALSE)
   saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"), 
              selfcontained = FALSE)
-  
-  # Use 600 x 322 for LinkedIn
-  # Otherwise, 1200 x 720
-  # 
-  img <- image_graph(width = 1200, height = 720, res = 96)
-  print(magick::image_read('Marketplace_Zillow_JordanMeyer.png'), 
-        strip = TRUE)
-  print(p3)
-  print(p4)
-  print(p5)
-  print(p1)
-  print(p2)
-  print(p6)
-  print(p7)
-  dev.off()
-  
-  animation <- image_animate(image_scale(img), fps = 0.25)
-  image_write(animation, paste0(folder_save, "AF_animate.gif"))
-  dev.off()
-  
-  img <- image_graph(width = 600, height = 322, res = 96)
-  print(magick::image_read('Marketplace_Zillow_JordanMeyer.png'),
-        strip = TRUE)
-  print(p3)
-  print(p4)
-  print(p5)
-  print(p1)
-  print(p2)
-  print(p6)
-  print(p7)
-  dev.off()
-  
-  animation <- image_animate(image_scale(img), fps = 0.25)
-  image_write(animation, paste0(folder_save, "AF_LinkedIn_animate.gif"))
 }
 invisible(allAF_frm)
 }
