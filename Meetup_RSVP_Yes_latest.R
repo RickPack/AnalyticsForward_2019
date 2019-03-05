@@ -1,3 +1,4 @@
+# could use RVerbalExpressions to find other Meetups to analyze
 extrafont::loadfonts(device = "win")
 # extrafont::font_import("C:/Windows/Fonts/", pattern = "GIL_____")
 library(httr)
@@ -407,7 +408,7 @@ p2 <-
   # http://colorbrewer2.org/#type=qualitative&scheme=Set2&n=5
   scale_colour_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854")) +
   geom_text(inherit.aes = FALSE, color = "white",
-            aes(x = min(allAF_frm$days_to_event) + 50, 
+            aes(x = min(allAF_frm$days_to_event) + 10, 
                 y = max_registrations + 10,
                 label = paste0("Record registrations = ", max_registrations)),
             size = 08) +
@@ -500,8 +501,6 @@ p6 <- ggplot(allAF_frm_dt_day,
         panel.background = element_rect(fill = '#333333'),
         plot.background = element_rect(fill = '#333333'),
         panel.grid = element_blank(),
-        legend.background = element_blank(),
-        legend.key = element_blank(),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 
@@ -530,8 +529,6 @@ p7 <- ggplot(allAF_frm_dt_day_currentweek,
         panel.background = element_rect(fill = '#333333'),
         plot.background = element_rect(fill = '#333333'),
         panel.grid = element_blank(),
-        legend.background = element_blank(),
-        legend.key = element_blank(),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank())
 
@@ -621,9 +618,9 @@ if (save_to_folder) {
                                     strip = TRUE) 
                  # image_scale("650x420") %>% 
   p1_image    <- image_read("af_2019-1.png") 
-  p2_image    <- image_read("af_2019-2.png") %>% 
-                   image_annotate(str_glue("Will 2019 set a new record?"),
-                   size = 20, gravity = "northwest", color = "blue")
+  p2_image    <- image_read("af_2019-2.png")
+                 # image_annotate(str_glue("Will 2019 set a new record?"),
+                 # size = 20, gravity = "northwest", color = "blue") %>% 
   p3_image    <- image_read("af_2019-3.png") 
   p4_image    <- image_read("af_2019-4.png") 
   p5_image    <- image_read("af_2019-5.png") 
