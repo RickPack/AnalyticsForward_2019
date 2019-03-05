@@ -154,11 +154,14 @@ if (!github_file) {
     group_by(id_name, event_date, false_creation_date_per_AF_year,
              creation_date_per_AF_year,
              id, name, yes_year) %>%
-    mutate(max_date_per_AF_year = ymd(max(dates_yes))) %>%
+    mutate(max_date_per_AF_year = case_when(
+             yes_year == year(ymd(todaydt)) ~ ymd(todaydt), 
+             TRUE ~ max(ymd(dates_yes)))) %>%
     # https://blog.exploratory.io/populating-missing-dates-with-complete-and-fill-functions-in-r-and-exploratory-79f2a321e6b5
     # Notice use of unique because seq.Date needs one value for 'from' and 'to' arguments
     tidyr::complete(dates_yes = seq.Date(unique(creation_date_per_AF_year), 
-                                         unique(max_date_per_AF_year), by = "day")) %>%
+                                         unique(max_date_per_AF_year),
+                                            by = "day")) %>%
     replace_na(list(rsvp_yes_count = 0)) %>%
     mutate(dates_yes_cumsum = cumsum(rsvp_yes_count)) %>%
     ungroup() %>%
