@@ -22,7 +22,7 @@ Charts
 Total Registrations for Analytics&gt;Forward per year
 -----------------------------------------------------
 
-    ## [1] "As of  2019-03-04 19:44:52"
+    ## [1] "As of  2019-03-05 05:30:53"
 
 | name                                                                  | Year |  Registration\_Count|
 |:----------------------------------------------------------------------|:-----|--------------------:|
@@ -30,4 +30,4 @@ Total Registrations for Analytics&gt;Forward per year
 | Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016 |                  124|
 | Analytics&gt;Forward                                                  | 2017 |                  110|
 | Analytics&gt;Forward 2018                                             | 2018 |                  161|
-| Analytics&gt;Forward 2019                                             | 2019 |                  117|
+| Analytics&gt;Forward 2019                                             | 2019 |                  120|

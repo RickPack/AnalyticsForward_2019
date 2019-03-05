@@ -1,7 +1,7 @@
 ---
 title: "Analytics>Forward 2019"
 author: "Rick Pack (Research Triangle Analysts)"
-date: "March 3, 2019"
+date: "March 5, 2019"
 # output: html_document
 output:
   md_document:
@@ -38,7 +38,9 @@ meetupgrp_name <- 'Research-Triangle-Analysts'
 
 
 source('Meetup_RSVP_Yes_latest.R')
-allAF_frm <- Meetup_RSVP_Yes_Count(save_to_folder, github_file, meetupgrp_name, folder_save)
+lst_out <- Meetup_RSVP_Yes_Count(save_to_folder, github_file, meetupgrp_name, folder_save)
+allAF_frm <- lst_out[[1]]
+
 
 ```
 

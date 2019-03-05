@@ -10,6 +10,7 @@ library(directlabels)
 library(highcharter)
 library(htmlwidgets)
 library(plotly)
+library(ggforce)
 
 Meetup_RSVP_Yes_Count <- function(save_to_folder = TRUE, 
                                   github_file = FALSE, 
@@ -30,6 +31,9 @@ relative_day_graph_helper <- function(){
   # For example, if it's 2019 and 30 days remain until the event and
   # 2019 has 40 registrations, but 2018 had 50 on that day, 
   # 2019 will appear below 2018.
+  
+  max_yes_year <- max(allAF_frm$yes_year)
+  
   today_days_to_event      <- allAF_frm %>%
     dplyr::filter(yes_year == max_yes_year) %>%
     mutate(min_days_event = min(days_to_event)) %>%
@@ -37,13 +41,19 @@ relative_day_graph_helper <- function(){
     pull(min_days_event)
   
   today_relative_yes_count <- allAF_frm %>%
+    select(yes_year, id, days_to_event, dates_yes_cumsum) %>% 
     group_by(yes_year) %>%
     dplyr::filter(days_to_event == today_days_to_event) %>%
     # relative to today
     rename(relative_today_cumsum = dates_yes_cumsum) %>%
     ungroup() %>%
     select(id, relative_today_cumsum)
-  rel_obj <- list(today_days_to_event, today_relative_yes_count)
+  
+  # Maximum number of registrations - for horizontal line on graph
+  max_registrations <- max(allAF_frm$dates_yes_cumsum)
+  
+  rel_obj <- list(today_days_to_event, today_relative_yes_count, max_registrations,
+                  max_yes_year)
 }
 ##########################################
 ##   START of non-Github download code  ##     
@@ -172,11 +182,12 @@ if (!github_file) {
       allAF_frm$dates_yes,"%d-%m-2020"),
     format = "%d-%m-%y")
   
-  max_yes_year <- max(allAF_frm$yes_year)
-  
   rel_obj <- relative_day_graph_helper()
-  today_relative_yes_count <- rel_obj[[2]]
   today_days_to_event      <- rel_obj[[1]]
+  today_relative_yes_count <- rel_obj[[2]]
+  max_registrations        <- rel_obj[[3]]
+  max_yes_year             <- rel_obj[[4]]
+  
   
   allAF_frm            <- allAF_frm %>%
     left_join(., today_relative_yes_count) %>%
@@ -214,7 +225,6 @@ if (github_file) {
                                             "Thursday", "Friday" ,"Saturday", "Sunday"),
                                         ordered = TRUE),
            yes_year_factor = fct_rev(factor(yes_year_factor)))
-  max_yes_year <- max(allAF_frm$yes_year)
   relative_day_graph_helper()
 }
 
@@ -288,9 +298,6 @@ allAF_frm_weekday_final_week <- allAF_frm %>%
          yes_year_factor = fct_rev(factor(yes_year))) %>%
   select(-yes_year, -yes_weekday)
 
-# Maximum number of registrations - for horizontal line on graph
-max_registrations <- max(allAF_frm$dates_yes_cumsum)
-
 p1 <- 
   ggplot(data = allAF_frm,
          aes(x = dates_yes_otheryear,
@@ -355,27 +362,55 @@ p2 <-
          aes(x = as.numeric(days_to_event),
              y = dates_yes_cumsum,
              colour = yes_year_factor)) +
-  geom_line(size = 1) +
-  xlab("Days to Event") +
+  geom_line(size = 2) +
+  ggforce::geom_mark_ellipse(aes(filter = yes_year_factor == max_yes_year, 
+                                 colour = yes_year_factor, label = yes_year_factor),
+                             expand = unit(0.02, 'mm'),
+                             label.colour = "#fc8d62",
+                             label.fontsize = 16, label.fill = "black",
+                             label.buffer = unit(1, 'mm'),
+                             con.colour = "white", con.size = 0.3,
+                             con.type = "elbow") +
+  ggforce::geom_link(aes(x = min(allAF_frm$days_to_event),
+                         xend = max(allAF_frm$days_to_event),
+                         y = max_registrations,
+                         yend = max_registrations),
+                     color = "white",
+                     size = 1
+  ) +
+  xlab("Date") +
   ylab("YES (will attend) RSVPs") +
   labs(colour = "Year") + 
-  ggtitle(label = paste0("Research Triangle Analysts 'Analytics>Forward' as of\n",
-                         Sys.Date(), "\nChart 2 of 7"),
-          subtitle = str_glue("Zillow Data Science (Kaggle) winner, Jordan Meyer,", 
-                              " keynoting March 9, 2019\n",
-                              as.numeric(today_days_to_event), " days remaining")) +
-  
-  directlabels::geom_dl(aes(label = yes_year), method = list("last.points",rot = -50)) +
-  theme(plot.title = element_text(hjust = 0.5, size = 16, lineheight = .8, face = "bold"),
-        plot.subtitle = element_text(hjust = 0.5, size = 12),
-        axis.text.x = element_text(face = "bold.italic", color = "red", size = 16),
-        axis.text.y = element_text(face = "bold.italic", color = "red", size = 16)) +
+  ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
+                           "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)"),
+          subtitle = str_glue("Keynote by Jordan Meyer: $1M Zillow datascience (Kaggle) winner\n",
+                              "Data as of ", as.character(Sys.time()), ": ",
+                              as.numeric(today_days_to_event), " days remaining\nChart 2 of 7")) +
+  scale_x_reverse() +
+  directlabels::geom_dl(aes(label = yes_year), 
+                        method = list("last.points", rot = -50, cex = 2)) +
+  theme(plot.title = element_text(hjust = 0.5, color = '#EEEEEE',
+                                  lineheight = .8, face = "bold",
+                                  size = 26),
+        plot.subtitle = element_text(hjust = 0.5, color = '#EEEEEE',
+                                     size = 20),
+        axis.text.x = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
+        axis.text.y = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
+        legend.position = "none",
+        text = element_text(family = 'Gill Sans MT', size = 13, color = '#EEEEEE'),
+        panel.background = element_rect(fill = '#333333'),
+        plot.background = element_rect(fill = '#333333'),
+        panel.grid = element_blank(),
+        legend.background = element_blank(),
+        legend.key = element_blank()) +
+  labs(colour = "Year") + 
   # http://colorbrewer2.org/#type=qualitative&scheme=Set2&n=5
   scale_colour_manual(values = c("#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854")) +
-  scale_x_reverse() +
-  # annotate("text", x = 30, y = 90,
-  #          label = "2019 registrations recently went flat",
-  #          size = 5) +
+  geom_text(inherit.aes = FALSE, color = "white",
+            aes(x = min(allAF_frm$days_to_event) + 50, 
+                y = max_registrations + 10,
+                label = paste0("Record registrations = ", max_registrations)),
+            size = 08) +
   NULL
 
 p3 <-
@@ -447,20 +482,35 @@ p6 <- ggplot(allAF_frm_dt_day,
              aes(hour_rsvp, weekday_rsvp)) + geom_tile(aes(fill = dates_yes_cumsum), 
                                                        colour = "white", na.rm = TRUE) +
   scale_fill_gradient(low = "#66c2a5", high = "#a6d854") +  
-  guides(fill = guide_legend(title="Total\nRegistrations")) +
+  guides(fill = guide_legend(title = "Total\nRegistrations")) +
   theme_bw() + theme_minimal() + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
                            "Chart 6 of 7")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  theme(plot.title = element_text(hjust = 0.5, color = '#EEEEEE',
+                                  lineheight = .8, face = "bold",
+                                  size = 26),
+        plot.subtitle = element_text(hjust = 0.5, color = '#EEEEEE',
+                                     size = 20),
+        axis.text.x = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
+        axis.text.y = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
+        legend.position = "none",
+        text = element_text(family = 'Gill Sans MT', size = 13, color = '#EEEEEE'),
+        panel.background = element_rect(fill = '#333333'),
+        plot.background = element_rect(fill = '#333333'),
+        panel.grid = element_blank(),
+        legend.background = element_blank(),
+        legend.key = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
 
 # from https://www.littlemissdata.com/blog/heatmaps
 p7 <- ggplot(allAF_frm_dt_day_currentweek, 
        aes(hour_rsvp, weekday_rsvp)) + geom_tile(aes(fill = dates_yes_cumsum), 
                                                  colour = "white", na.rm = TRUE) +
   scale_fill_gradient(low = "#66c2a5", high = "#a6d854") +  
-  guides(fill = guide_legend(title="Total\nRegistrations")) +
+  guides(fill = guide_legend(title = "Total\nRegistrations")) +
   theme_bw() + theme_minimal() + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
@@ -468,7 +518,22 @@ p7 <- ggplot(allAF_frm_dt_day_currentweek,
           subtitle = str_glue("Depicting only when weeks until event = current weeks until event (", 
                               weeks_until_event, ")")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+  theme(plot.title = element_text(hjust = 0.5, color = '#EEEEEE',
+                                  lineheight = .8, face = "bold",
+                                  size = 26),
+        plot.subtitle = element_text(hjust = 0.5, color = '#EEEEEE',
+                                     size = 20),
+        axis.text.x = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
+        axis.text.y = element_text(face = "bold.italic", color = "#EEEEEE", size = 11),
+        legend.position = "none",
+        text = element_text(family = 'Gill Sans MT', size = 13, color = '#EEEEEE'),
+        panel.background = element_rect(fill = '#333333'),
+        plot.background = element_rect(fill = '#333333'),
+        panel.grid = element_blank(),
+        legend.background = element_blank(),
+        legend.key = element_blank(),
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank())
 
 grp_members <- get_members(meetupgrp_name)
 
@@ -552,21 +617,19 @@ if (save_to_folder) {
   ggsave(p6, file = "af_2019-6.png", dpi = 72, width = 12, height = 5)
   ggsave(p7, file = "af_2019-7.png", dpi = 72, width = 12, height = 5)
 #  cowplot::save_plot("af_2019-1.png", p1)
-  intro_image <- magick::image_read('Marketplace_Zillow_JordanMeyer.png', strip = TRUE) %>% 
-                 image_scale("650x420") %>% 
-                 image_annotate(str_glue("Stan Humphries, Zillow chief analytics officer, ",
-                                "and Jordan Meyer of Raleigh\n
-                                [Marketplace.org: 'What does it take to make a home estimate more ",
-                                "accurate?'"),
-                                size = 20, gravity = "northwest", color = "blue")
+  intro_image <- magick::image_read('Marketplace_Zillow_JordanMeyer_864x360.png', 
+                                    strip = TRUE) 
+                 # image_scale("650x420") %>% 
   p1_image    <- image_read("af_2019-1.png") 
-  p2_image    <- image_read("af_2019-2.png") 
+  p2_image    <- image_read("af_2019-2.png") %>% 
+                   image_annotate(str_glue("Will 2019 set a new record?"),
+                   size = 20, gravity = "northwest", color = "blue")
   p3_image    <- image_read("af_2019-3.png") 
   p4_image    <- image_read("af_2019-4.png") 
   p5_image    <- image_read("af_2019-5.png") 
   p6_image    <- image_read("af_2019-6.png") 
   p7_image    <- image_read("af_2019-7.png") 
-  img <- c(p1_image, intro_image, p2_image, p3_image,
+  img <- c(intro_image, p1_image, p2_image, p3_image,
            p4_image, p5_image, p6_image, p7_image)
   animate1 <- image_animate(img, fps = 0.25, dispose = "previous")
   image_write(animate1, "AF_animate.gif")
@@ -576,5 +639,7 @@ if (save_to_folder) {
   saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"), 
              selfcontained = FALSE)
 }
-invisible(allAF_frm)
+lst_out <- list(allAF_frm, allAF_frm_weekday, allAF_frm_weekday_not_finalweek,
+                allAF_frm_dt_day, allAF_frm_dt_day_currentweek)
+invisible(lst_out)
 }
