@@ -474,7 +474,7 @@ p5 <-
                          Sys.Date(), "\nChart 5 of 7"),
           subtitle = str_glue("Zillow Data Science (Kaggle) winner, Jordan Meyer,", 
                               " keynoting March 9, 2019\nONLY the week of the event",
-                              "(2 ppl in 2017 registered early AM, Saturday).\n",
+                              " (2 ppl in 2017 registered early Saturday AM).\n",
                               as.numeric(today_days_to_event), " days remaining")) +
   theme(plot.title = element_text(hjust = 0.5, size = 16, lineheight = .8, face = "bold"),
         plot.subtitle = element_text(hjust = 0.5, size = 12),

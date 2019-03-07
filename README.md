@@ -34,10 +34,19 @@ Week of event average registrations per day
 | Fri           |               7.3333333|
 | Sat           |               0.6666667|
 
+### Current year
+
+| weekday\_rsvp |  Average\_RSVP\_weekday|
+|:--------------|-----------------------:|
+| Sun           |                1.666667|
+| Mon           |                2.000000|
+| Tue           |                1.666667|
+| Wed           |                2.000000|
+
 Total Registrations for Analytics&gt;Forward per year
 -----------------------------------------------------
 
-    ## [1] "As of  2019-03-07 07:58:04"
+    ## [1] "As of  2019-03-07 09:03:49"
 
 | name                                                                  | Year |  Registration\_Count|
 |:----------------------------------------------------------------------|:-----|--------------------:|

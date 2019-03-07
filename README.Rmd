@@ -92,14 +92,14 @@ Thank you to R-Ladies for the meetupr package.
 
 ### prior to the current year and after 2015 (first year, lower registrations)
 
-```{r tables1}
+```{r table_notcur}
 allAF_frm_dt_all_big_years_not_current <-
   allAF_frm_dt_all %>% 
-  dplyr::filter(yes_year > 2015 & yes_year < 2019)
+  dplyr::filter(yes_year > 2015 & yes_year < max_yes_year)
 
 allAF_frm_dt_all_big_years_not_current_weekday <-
   allAF_frm_dt_all_big_years_not_current %>% 
-    dplyr::filter(yes_year > 2015 & yes_year < 2019) %>% 
+    dplyr::filter(yes_year > 2015 & yes_year < max_yes_year) %>% 
     dplyr::filter(days_to_event <= 6 * (weeks_until_event + 1) + min(weeks_until_event, 1) &
                     days_to_event >= 6 * (weeks_until_event + 1) + min(weeks_until_event, 1) - 6) %>% 
     mutate(hour_rsvp = hour(datetime_rsvp),
@@ -111,8 +111,29 @@ allAF_frm_dt_all_big_years_not_current_weekday <-
 knitr::kable(allAF_frm_dt_all_big_years_not_current_weekday)
 ```
 
+### Current year 
+
+```{r table_curyear}
+allAF_frm_dt_all_current <-
+  allAF_frm_dt_all %>% 
+  dplyr::filter(yes_year == 2019)
+
+allAF_frm_dt_all_current_year_weekday <-
+  allAF_frm_dt_all_current %>% 
+    dplyr::filter(yes_year == max_yes_year) %>% 
+    dplyr::filter(days_to_event <= 6 * (weeks_until_event + 1) + min(weeks_until_event, 1) &
+                    days_to_event >= 6 * (weeks_until_event + 1) + min(weeks_until_event, 1) - 6) %>% 
+    mutate(hour_rsvp = hour(datetime_rsvp),
+           weekday_rsvp = wday(ymd_hms(datetime_rsvp), label = TRUE)) %>% 
+    group_by(weekday_rsvp) %>% 
+    summarise(Average_RSVP_weekday = n() /   
+              length(unique(allAF_frm_dt_all_big_years_not_current$yes_year)))
+
+knitr::kable(allAF_frm_dt_all_current_year_weekday)
+```
+
 ## Total Registrations for Analytics>Forward per year
-```{r tables2}
+```{r table_peryear}
 library(dplyr)
 print(paste("As of ", Sys.time()))
 knitr::kable(allAF_frm %>% group_by(yes_year_factor) %>% 
