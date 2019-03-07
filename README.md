@@ -19,10 +19,25 @@ Charts
 
 ![Chart 1](af_2019-1.png) ![Chart 2](af_2019-2.png) ![Chart 3](af_2019-3.png) ![Chart 4](af_2019-4.png) ![Chart 5](af_2019-5.png) ![Chart 6](af_2019-6.png) ![Chart 7](af_2019-7.png)
 
+Week of event average registrations per day
+-------------------------------------------
+
+### prior to the current year and after 2015 (first year, lower registrations)
+
+| weekday\_rsvp |  Average\_RSVP\_weekday|
+|:--------------|-----------------------:|
+| Sun           |               3.0000000|
+| Mon           |               8.3333333|
+| Tue           |               7.6666667|
+| Wed           |               4.3333333|
+| Thu           |               6.0000000|
+| Fri           |               7.3333333|
+| Sat           |               0.6666667|
+
 Total Registrations for Analytics&gt;Forward per year
 -----------------------------------------------------
 
-    ## [1] "As of  2019-03-06 07:43:02"
+    ## [1] "As of  2019-03-07 07:58:04"
 
 | name                                                                  | Year |  Registration\_Count|
 |:----------------------------------------------------------------------|:-----|--------------------:|
@@ -30,4 +45,4 @@ Total Registrations for Analytics&gt;Forward per year
 | Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016 |                  124|
 | Analytics&gt;Forward                                                  | 2017 |                  110|
 | Analytics&gt;Forward 2018                                             | 2018 |                  161|
-| Analytics&gt;Forward 2019                                             | 2019 |                  126|
+| Analytics&gt;Forward 2019                                             | 2019 |                  131|

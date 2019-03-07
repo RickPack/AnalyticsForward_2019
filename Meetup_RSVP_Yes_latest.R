@@ -202,7 +202,7 @@ allAF_frm_weekday <- allAF_frm %>%
   ## Notice that using weekdays required extra factor work
   mutate(yes_weekday_factor = wday(ymd(dates_yes), label = TRUE)) %>%
   group_by(yes_year, yes_weekday_factor) %>%
-  summarise(dates_yes_cumsum_week = sum(rsvp_yes_count)) %>%
+  summarise(rsvp_yes_cumsum_weekday = sum(rsvp_yes_count)) %>%
   ungroup() %>%
   # forcats::fct_rev used to reverse order 
   # (later year will come first)
@@ -255,7 +255,7 @@ allAF_frm_weekday_not_finalweek <- allAF_frm %>%
   dplyr::filter(days_to_event > 6) %>%
   mutate(yes_weekday = weekdays(ymd(dates_yes))) %>%
   group_by(yes_year, yes_weekday) %>%
-  summarise(dates_yes_cumsum_week = sum(rsvp_yes_count)) %>%
+  summarise(rsvp_yes_cumsum_weekday = sum(rsvp_yes_count)) %>%
   ungroup() %>%
   mutate(yes_weekday_factor  = factor(yes_weekday, levels = 
                                         c("Monday", "Tuesday", "Wednesday",
@@ -274,7 +274,7 @@ allAF_frm_weekday_penult_week <- allAF_frm %>%
   dplyr::filter(days_to_event > 6 & days_to_event < 14) %>%
   mutate(yes_weekday = weekdays(ymd(dates_yes))) %>%
   group_by(yes_year, yes_weekday) %>%
-  summarise(dates_yes_cumsum_week = sum(rsvp_yes_count)) %>%
+  summarise(rsvp_yes_cumsum_weekday = sum(rsvp_yes_count)) %>%
   ungroup() %>%
   mutate(yes_weekday_factor  = factor(yes_weekday, levels = 
                                         c("Monday", "Tuesday", "Wednesday",
@@ -290,7 +290,7 @@ allAF_frm_weekday_final_week <- allAF_frm %>%
   dplyr::filter(days_to_event < 7) %>%
   mutate(yes_weekday = weekdays(ymd(dates_yes))) %>%
   group_by(yes_year, yes_weekday) %>%
-  summarise(dates_yes_cumsum_week = sum(rsvp_yes_count)) %>%
+  summarise(rsvp_yes_cumsum_weekday = sum(rsvp_yes_count)) %>%
   ungroup() %>%
   mutate(yes_weekday_factor  = factor(yes_weekday, levels = 
                                         c("Monday", "Tuesday", "Wednesday",
@@ -419,7 +419,7 @@ p2 <-
 
 p3 <-
   ggplot(data = allAF_frm_weekday,
-         aes(y = dates_yes_cumsum_week,
+         aes(y = rsvp_yes_cumsum_weekday,
              x = yes_weekday_factor,
              fill = yes_year_factor)) +
   geom_bar(position = "stack", stat = "identity") +
@@ -440,7 +440,7 @@ p3 <-
   
 p4 <-
   ggplot(data = allAF_frm_weekday_not_finalweek,
-         aes(y = dates_yes_cumsum_week,
+         aes(y = rsvp_yes_cumsum_weekday,
              x = yes_weekday_factor,
              fill = yes_year_factor)) +
   geom_bar(position = "stack", stat = "identity") +
@@ -461,7 +461,7 @@ p4 <-
 
 p5 <-
   ggplot(data = allAF_frm_weekday_final_week,
-         aes(y = dates_yes_cumsum_week,
+         aes(y = rsvp_yes_cumsum_weekday,
              x = yes_weekday_factor,
              fill = yes_year_factor)) +
   geom_bar(position = "stack", stat = "identity") +
@@ -638,6 +638,7 @@ if (save_to_folder) {
              selfcontained = FALSE)
 }
 lst_out <- list(allAF_frm, allAF_frm_weekday, allAF_frm_weekday_not_finalweek,
-                allAF_frm_dt_day, allAF_frm_dt_day_currentweek)
+                allAF_frm_dt_day, allAF_frm_dt_day_currentweek,
+                allAF_frm_dt_all)
 invisible(lst_out)
 }
