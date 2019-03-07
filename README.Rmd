@@ -90,7 +90,7 @@ Thank you to R-Ladies for the meetupr package.
 
 ## Week of event average registrations per day 
 
-### prior to the current year and after 2015 (first year, lower registrations)
+### Prior to the current year and after 2015 (first year, lower registrations)
 
 ```{r table_notcur}
 allAF_frm_dt_all_big_years_not_current <-
@@ -126,8 +126,7 @@ allAF_frm_dt_all_current_year_weekday <-
     mutate(hour_rsvp = hour(datetime_rsvp),
            weekday_rsvp = wday(ymd_hms(datetime_rsvp), label = TRUE)) %>% 
     group_by(weekday_rsvp) %>% 
-    summarise(Average_RSVP_weekday = n() /   
-              length(unique(allAF_frm_dt_all_big_years_not_current$yes_year)))
+    summarise(RSVP_weekday = n())
 
 knitr::kable(allAF_frm_dt_all_current_year_weekday)
 ```
