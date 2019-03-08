@@ -73,7 +73,7 @@ Highest Performing Days (Registrations)
 Total Registrations for Analytics&gt;Forward per year
 -----------------------------------------------------
 
-    ## [1] "As of  2019-03-08 07:43:13"
+    ## [1] "As of  2019-03-08 08:10:18"
 
 | name                                                                  |  Year|  Total\_Registrations|
 |:----------------------------------------------------------------------|-----:|---------------------:|

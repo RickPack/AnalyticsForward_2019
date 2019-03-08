@@ -560,44 +560,50 @@ grp_members2 <- grp_members %>%
                 select(-dates_yes_cumsum), 
             by = "id") 
                         
-grp_plot <- hchart(grp_members2, "line", 
-                   hcaes(x = joined_date, y = member_count, 
-                         name = name, bio = bio, joined = joined)) %>%
-  hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>% 
-  hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership") %>%
-  hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
-                              "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
-  hc_credits(enabled = TRUE,
-             text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
-             href = "http://rpubs.com/maraaverick/470388",
-             style = list(
-               fontSize = "14px")) %>% 
-  hc_add_theme(hc_theme_flat(
-    plotOptions = list(
-      scatter = list(
-        marker = list(radius = 4,
-                      fillOpacity = 0.3)
-      ))))  
+# grp_plot <- hchart(grp_members2, "line", 
+#                    hcaes(x = joined_date, y = member_count, 
+#                          name = name, bio = bio, joined = joined)) %>%
+#   hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>% 
+#   hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership") %>%
+#   hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
+#                               "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
+#   hc_credits(enabled = TRUE,
+#              text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
+#              href = "http://rpubs.com/maraaverick/470388",
+#              style = list(
+#                fontSize = "14px")) %>% 
+#   hc_add_theme(hc_theme_flat(
+#     plotOptions = list(
+#       scatter = list(
+#         marker = list(radius = 4,
+#                       fillOpacity = 0.3)
+#       ))))  
+# 
+# grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
+#                               "line", 
+#                               hcaes(x = joined_date, y = member_count, 
+#                                     name = name, bio = bio, joined = joined)) %>%
+#   hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>% 
+#   hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership\n[ONLY latest year shown]") %>%
+#   hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
+#                               "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
+#   hc_credits(enabled = TRUE,
+#              text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
+#              href = "http://rpubs.com/maraaverick/470388",
+#              style = list(
+#                fontSize = "14px")) %>% 
+#   hc_add_theme(hc_theme_flat(
+#     plotOptions = list(
+#       scatter = list(
+#         marker = list(radius = 4,
+#                       fillOpacity = 0.3)
+#       ))))         
 
-grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
-                              "line", 
-                              hcaes(x = joined_date, y = member_count, 
-                                    name = name, bio = bio, joined = joined)) %>%
-  hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>% 
-  hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership\n[ONLY latest year shown]") %>%
-  hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
-                              "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
-  hc_credits(enabled = TRUE,
-             text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
-             href = "http://rpubs.com/maraaverick/470388",
-             style = list(
-               fontSize = "14px")) %>% 
-  hc_add_theme(hc_theme_flat(
-    plotOptions = list(
-      scatter = list(
-        marker = list(radius = 4,
-                      fillOpacity = 0.3)
-      ))))         
+## ggsave fails on higchart htmlwidget object
+# saveWidget(grp_plot, file = paste0("RTAgrp.html"), 
+#            selfcontained = FALSE)
+# saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"), 
+#            selfcontained = FALSE)
 
 # Thanks http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
 # grp_plot_geomcount <-
@@ -631,11 +637,6 @@ if (save_to_folder) {
            p4_image, p5_image, p6_image, p7_image)
   animate1 <- image_animate(img, fps = 0.25)
   image_write(animate1, "AF_animate.gif")
-  ## ggsave fails on higchart htmlwidget object
-  saveWidget(grp_plot, file = paste0("RTAgrp.html"), 
-             selfcontained = FALSE)
-  saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"), 
-             selfcontained = FALSE)
 }
 lst_out <- list(allAF_frm, allAF_frm_weekday, allAF_frm_weekday_not_finalweek,
                 allAF_frm_dt_day, allAF_frm_dt_day_currentweek,
