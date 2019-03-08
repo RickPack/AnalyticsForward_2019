@@ -382,7 +382,7 @@ p2 <-
                      color = "white",
                      size = 1
   ) +
-  xlab("Date") +
+  xlab("Days to Event") +
   ylab("YES (will attend) RSVPs") +
   labs(colour = "Year") + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
@@ -490,7 +490,7 @@ p6 <- ggplot(allAF_frm_dt_day,
   theme_bw() + theme_minimal() + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
-                           "Chart 6 of 7")) +
+                           "Chart 6 of 7 (all years shown)")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
   theme(plot.title = element_text(hjust = 0.5, color = '#EEEEEE',
                                   lineheight = .8, face = "bold",
@@ -515,7 +515,7 @@ p7 <- ggplot(allAF_frm_dt_day_currentweek,
   theme_bw() + theme_minimal() + 
   ggtitle(label = str_glue("Registrations for Research Triangle Analysts 'Analytics>Forward'\n",
                            "March 9, 2019 at Blue Cross and Blue Shield NC (Durham)\n",
-                           "Chart 7 of 7"),
+                           "Chart 7 of 7 (all years shown)"),
           subtitle = str_glue("Depicting only when weeks until event = current weeks until event (", 
                               weeks_until_event, ")")) +
   labs(x = "Registrations ('Yes' RSVPs) Per Hour", y = "Day of Week") +
@@ -615,9 +615,9 @@ if (save_to_folder) {
   ggsave(p6, file = "af_2019-6.png", dpi = 72, width = 12, height = 5)
   ggsave(p7, file = "af_2019-7.png", dpi = 72, width = 12, height = 5)
 #  cowplot::save_plot("af_2019-1.png", p1)
+#  Used Paint to change resolution to avoid truncation when animate used
   intro_image <- magick::image_read('Marketplace_Zillow_JordanMeyer_864x360.png', 
                                     strip = TRUE) 
-                 # image_scale("650x420") %>% 
   p1_image    <- image_read("af_2019-1.png") 
   p2_image    <- image_read("af_2019-2.png")
                  # image_annotate(str_glue("Will 2019 set a new record?"),
@@ -629,7 +629,7 @@ if (save_to_folder) {
   p7_image    <- image_read("af_2019-7.png") 
   img <- c(intro_image, p1_image, p2_image, p3_image,
            p4_image, p5_image, p6_image, p7_image)
-  animate1 <- image_animate(img, fps = 0.25, dispose = "previous")
+  animate1 <- image_animate(img, fps = 0.25)
   image_write(animate1, "AF_animate.gif")
   ## ggsave fails on higchart htmlwidget object
   saveWidget(grp_plot, file = paste0("RTAgrp.html"), 

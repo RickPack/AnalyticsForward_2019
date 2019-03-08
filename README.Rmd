@@ -1,7 +1,7 @@
 ---
 title: "Analytics>Forward 2019"
 author: "Rick Pack (Research Triangle Analysts)"
-date: "March 7, 2019"
+date: "March 8, 2019"
 # output: html_document
 output:
   md_document:
@@ -43,10 +43,21 @@ allAF_frm <- lst_out[[1]]
 allAF_frm_weekday <- lst_out[[2]]
 allAF_frm_dt_all <- lst_out[[6]]
 
-max_yes_year <- max(allAF_frm$yes_year)
+allAF_frm <- 
+  allAF_frm %>% 
+  rename(Year = yes_year, 
+         Registration_Count = rsvp_yes_count,
+         Registration_CumSum = dates_yes_cumsum,
+         Registration_Date = dates_yes) %>% 
+  mutate(Weekday = wday(ymd(Registration_Date), label = TRUE)) %>% 
+  select(name, Year, Registration_Date, Weekday, Registration_Count,
+         Registration_CumSum, Registration_Date,
+         event_date, days_to_event)
+
+max_yes_year <- max(allAF_frm$Year)
 
 today_days_to_event      <- allAF_frm %>%
-    dplyr::filter(yes_year == max_yes_year) %>%
+    dplyr::filter(Year == max_yes_year) %>%
     mutate(min_days_event = min(days_to_event)) %>%
     distinct(min_days_event) %>%
     pull(min_days_event)
@@ -57,11 +68,11 @@ weeks_until_event <- as.numeric(floor(today_days_to_event / 7))
 
 # "Analytics>Forward" (2019) - 5th annual unconference by Research Triangle Analysts
 
-"Pitch a talk, hear some talks" #AnalyticsForward http://bit.ly/AF2019Signup
+"Pitch a talk, hear some talks, eat good food" #AnalyticsForward http://bit.ly/AF2019Signup
 
 This page's data visualizations will be updated daily.
 
-They primarily depict Meetup registrations for Analytics>Forward, with the purpose of indicating sell-out potential and to help the planning comittee with elements including the catering order.
+They primarily depict Meetup Registrations for Analytics>Forward, with the purpose of indicating sell-out potential and to help the planning comittee with elements including the catering order.
 
 Thank you to R-Ladies for the meetupr package.
 
@@ -88,9 +99,9 @@ Thank you to R-Ladies for the meetupr package.
 #print(grp_plot_latestyear)
 ```
 
-## Week of event average registrations per day 
+## Week of event average Registrations per day 
 
-### Prior to the current year and after 2015 (first year, lower registrations)
+### Prior to the current year and after 2015 (first year, lower Registrations)
 
 ```{r table_notcur}
 allAF_frm_dt_all_big_years_not_current <-
@@ -131,12 +142,39 @@ allAF_frm_dt_all_current_year_weekday <-
 knitr::kable(allAF_frm_dt_all_current_year_weekday)
 ```
 
+## Highest Performing Days (Registrations)
+
+### All years - 5 Highest Performing Days
+```{r table_high_all_years}
+high_all_years <- allAF_frm %>% 
+  ungroup() %>% 
+  top_n(5, Registration_Count) %>% 
+  arrange(desc(Registration_Count))
+knitr::kable(high_all_years %>% 
+             select(name, Registration_Date, Weekday, Registration_Count))
+```
+
+### Current year - 5 Highest Performing Days
+```{r table_high_cur_year}
+high_cur_year <- allAF_frm %>% 
+  ungroup() %>% 
+  dplyr::filter(Year == max_yes_year) %>% 
+  top_n(5, Registration_Count) %>% 
+  arrange(desc(Registration_Count))
+knitr::kable(high_cur_year %>% 
+             select(name, Registration_Date, Weekday, Registration_Count))
+```
+
 ## Total Registrations for Analytics>Forward per year
 ```{r table_peryear}
 library(dplyr)
 print(paste("As of ", Sys.time()))
-knitr::kable(allAF_frm %>% group_by(yes_year_factor) %>% 
-  dplyr::filter(dates_yes == max(dates_yes)) %>%
-  rename(Year = yes_year_factor, Registration_Count = dates_yes_cumsum) %>% 
-  select(name, Year, Registration_Count))
+knitr::kable(allAF_frm %>% group_by(Year) %>% 
+  dplyr::filter(Registration_Date == max(Registration_Date)) %>% 
+  rename(Total_Registrations = Registration_CumSum) %>% 
+  ungroup() %>% 
+  select(name, Year, Total_Registrations))
 ```
+
+# Current Year Analytics>Forward Registration Link
+[Current Year Meetup Link](http://bit.ly/AF2019Signup "Analytics>Forward 2019 Meetup page")
