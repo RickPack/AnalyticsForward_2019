@@ -50,31 +50,31 @@ Highest Performing Days (Registrations)
 
 ### All years - 5 Highest Performing Days
 
-| name                                                                  | Registration\_Date | Weekday |  Registration\_Count|
-|:----------------------------------------------------------------------|:-------------------|:--------|--------------------:|
-| Analytics&gt;Forward 2019                                             | 2019-01-31         | Thu     |                   19|
-| Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016-01-29         | Fri     |                   17|
-| Analytics&gt;Forward 2019                                             | 2019-03-08         | Fri     |                   13|
-| Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016-02-26         | Fri     |                   11|
-| Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016-03-07         | Mon     |                   11|
-| Analytics&gt;Forward 2018                                             | 2018-03-07         | Wed     |                   11|
-| Analytics&gt;Forward 2018                                             | 2018-03-08         | Thu     |                   11|
+| name                                                                  | Meetup\_Start\_Date | Registration\_Date | Weekday |  Registration\_Count|
+|:----------------------------------------------------------------------|:--------------------|:-------------------|:--------|--------------------:|
+| Analytics&gt;Forward 2019                                             | 2019-01-31          | 2019-01-31         | Thu     |                   19|
+| Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016-01-29          | 2016-01-29         | Fri     |                   17|
+| Analytics&gt;Forward 2019                                             | 2019-01-31          | 2019-03-08         | Fri     |                   13|
+| Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016-01-29          | 2016-02-26         | Fri     |                   11|
+| Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute | 2016-01-29          | 2016-03-07         | Mon     |                   11|
+| Analytics&gt;Forward 2018                                             | 2018-01-10          | 2018-03-07         | Wed     |                   11|
+| Analytics&gt;Forward 2018                                             | 2018-01-10          | 2018-03-08         | Thu     |                   11|
 
 ### Current year - 5 Highest Performing Days
 
-| name                      | Registration\_Date | Weekday |  Registration\_Count|
-|:--------------------------|:-------------------|:--------|--------------------:|
-| Analytics&gt;Forward 2019 | 2019-01-31         | Thu     |                   19|
-| Analytics&gt;Forward 2019 | 2019-03-08         | Fri     |                   13|
-| Analytics&gt;Forward 2019 | 2019-02-26         | Tue     |                   10|
-| Analytics&gt;Forward 2019 | 2019-02-27         | Wed     |                    9|
-| Analytics&gt;Forward 2019 | 2019-02-28         | Thu     |                    9|
-| Analytics&gt;Forward 2019 | 2019-03-07         | Thu     |                    9|
+| name                      | Meetup\_Start\_Date | Registration\_Date | Weekday |  Registration\_Count|
+|:--------------------------|:--------------------|:-------------------|:--------|--------------------:|
+| Analytics&gt;Forward 2019 | 2019-01-31          | 2019-01-31         | Thu     |                   19|
+| Analytics&gt;Forward 2019 | 2019-01-31          | 2019-03-08         | Fri     |                   13|
+| Analytics&gt;Forward 2019 | 2019-01-31          | 2019-02-26         | Tue     |                   10|
+| Analytics&gt;Forward 2019 | 2019-01-31          | 2019-02-27         | Wed     |                    9|
+| Analytics&gt;Forward 2019 | 2019-01-31          | 2019-02-28         | Thu     |                    9|
+| Analytics&gt;Forward 2019 | 2019-01-31          | 2019-03-07         | Thu     |                    9|
 
 Total Registrations for Analytics&gt;Forward per year
 -----------------------------------------------------
 
-    ## [1] "As of  2019-03-08 19:50:24"
+    ## [1] "As of  2019-03-08 20:02:12"
 
 | name                                                                  |  Year|  Total\_Registrations|
 |:----------------------------------------------------------------------|-----:|---------------------:|
@@ -82,7 +82,7 @@ Total Registrations for Analytics&gt;Forward per year
 | Analytics&gt;Forward, with Keynote by John Sall, EVP of SAS Institute |  2016|                   124|
 | Analytics&gt;Forward                                                  |  2017|                   110|
 | Analytics&gt;Forward 2018                                             |  2018|                   161|
-| Analytics&gt;Forward 2019                                             |  2019|                   153|
+| Analytics&gt;Forward 2019                                             |  2019|                   152|
 
 Current Year Analytics&gt;Forward Registration Link
 ===================================================

@@ -50,7 +50,9 @@ allAF_frm <-
          Registration_CumSum = dates_yes_cumsum,
          Registration_Date = dates_yes) %>% 
   mutate(Weekday = wday(ymd(Registration_Date), label = TRUE)) %>% 
-  select(name, Year, Registration_Date, Weekday, Registration_Count,
+  group_by(Year) %>% 
+  mutate(Meetup_Start_Date = min(Registration_Date)) %>% 
+  select(name, Meetup_Start_Date, Year, Registration_Date, Weekday, Registration_Count,
          Registration_CumSum, Registration_Date,
          event_date, days_to_event)
 
@@ -151,7 +153,7 @@ high_all_years <- allAF_frm %>%
   top_n(5, Registration_Count) %>% 
   arrange(desc(Registration_Count))
 knitr::kable(high_all_years %>% 
-             select(name, Registration_Date, Weekday, Registration_Count))
+             select(name, Meetup_Start_Date, Registration_Date, Weekday, Registration_Count))
 ```
 
 ### Current year - 5 Highest Performing Days
@@ -162,7 +164,7 @@ high_cur_year <- allAF_frm %>%
   top_n(5, Registration_Count) %>% 
   arrange(desc(Registration_Count))
 knitr::kable(high_cur_year %>% 
-             select(name, Registration_Date, Weekday, Registration_Count))
+             select(name, Meetup_Start_Date, Registration_Date, Weekday, Registration_Count))
 ```
 
 ## Total Registrations for Analytics>Forward per year
