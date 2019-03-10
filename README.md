@@ -1,6 +1,6 @@
 Analytics&gt;Forward 2019
 ================
-Rick Pack (Research Triangle Analysts)
+Rick Pack (VP of Research Triangle Analysts)
 March 10, 2019
 
 "Analytics&gt;Forward" (2019) - 5th annual unconference by Research Triangle Analysts
@@ -80,7 +80,7 @@ Highest Performing Days (Registrations)
 Total Registrations for Analytics&gt;Forward per year
 -----------------------------------------------------
 
-    ## [1] "As of  2019-03-10 16:39:49"
+    ## [1] "As of  2019-03-10 16:49:30"
 
 | name                                                                  |  Year|  Total\_Registrations|
 |:----------------------------------------------------------------------|-----:|---------------------:|
