@@ -13,11 +13,20 @@ library(htmlwidgets)
 library(plotly)
 library(ggforce)
 
+# Kevin Lubick [kevin.lubick@gmail.com] goo.gl/wfw844
+
+# Jay Tyo - SPC chart for manufacturing machines (different specs to check)
+# explore "time-series clustering" (ebb of registrations)
+# http://CSmore.info/on/naivebayes/
+# Stacked area chart = cividis 
+# y-axis by percentage of max
+# Naiive Bayes
+# Edit htmlgrp so actually has RTA joined date or change axes names
+# Positive predictive vs. negative predictive
+#   Attended AF or not (predictors of joined_date and bio)
 Meetup_RSVP_Yes_Count <- function(save_to_folder = TRUE, 
                                   github_file = FALSE, 
-                                  meetupgrp_name = 'Research-Triangle-Analysts',
-                                  folder_save = 
-                                   "C:/Users/rick2/Downloads/R/AnalyticsForward_2019/"){
+                                  meetupgrp_name = 'Research-Triangle-Analysts'){
 ## Notice need for raw.
 github_filename1 <- stringr::str_glue(
   'https://raw.githubusercontent.com/RickPack/Analytics',
@@ -37,7 +46,7 @@ relative_day_graph_helper <- function(){
   
   today_days_to_event      <- allAF_frm %>%
     dplyr::filter(yes_year == max_yes_year) %>%
-    mutate(min_days_event = min(days_to_event)) %>%
+    mutate(min_days_event = max(0, min(days_to_event))) %>%
     distinct(min_days_event) %>%
     pull(min_days_event)
   
@@ -121,7 +130,27 @@ if (!github_file) {
     group_by(id) %>% 
     mutate(creation_date_per_AF_year = min(dates_yes))
   
-  allRTA_events_future <- get_events(meetupgrp_name)
+   # meetupr::get_events() returns future events but if there are 0 scheduled,
+   # an error is presented
+   allRTA_events_future_func <- function(){
+      tryCatch(
+     {
+      future_events <- get_events(meetupgrp_name)
+      # return(future_events)
+      },
+      error = function(cond){
+       future_events <- data.frame()
+      # return(future_events)
+      },
+     finally = {
+       future_events <- data.frame()
+       return(future_events)
+     }
+   )
+   }
+   allRTA_events_future <- allRTA_events_future_func()
+   
+   
   allRTA_events_past   <- get_events(meetupgrp_name, "past")
   allRTA_events        <- rbind(allRTA_events_future, allRTA_events_past)
   AF_events            <- allRTA_events[grepl("FORWARD", toupper(allRTA_events$name)),]
@@ -210,8 +239,8 @@ allAF_frm_weekday <- allAF_frm %>%
   mutate(yes_year_factor = fct_rev(factor(yes_year))) %>%
   select(-yes_year)
 if (save_to_folder) {
-  write.csv(allAF_frm, paste0(folder_save, "AnalyticsForward_Registrations.csv"), row.names = FALSE)
-  write.csv(allAF_frm_weekday, paste0(folder_save, "AnalyticsForward_Reg_DayofWeek.csv"), row.names = FALSE)
+  write.csv(allAF_frm, "AnalyticsForward_Registrations.csv", row.names = FALSE)
+  write.csv(allAF_frm_weekday, "AnalyticsForward_Reg_DayofWeek.csv", row.names = FALSE)
  }
 }
 ##########################################
@@ -238,7 +267,7 @@ allAF_frm_dt_day <- allAF_frm_dt_all %>%
   group_by(weekday_rsvp, hour_rsvp) %>% 
   summarise(dates_yes_cumsum = n())
 
-weeks_until_event <- as.numeric(floor(today_days_to_event / 7))
+weeks_until_event <- max(0, as.numeric(floor(today_days_to_event / 7)))
 
 allAF_frm_dt_day_currentweek <- allAF_frm_dt_all %>% 
   dplyr::filter(days_to_event <= 6 * (weeks_until_event + 1) + min(weeks_until_event, 1) &
@@ -560,49 +589,49 @@ grp_members2 <- grp_members %>%
                 select(-dates_yes_cumsum), 
             by = "id") 
                         
-# grp_plot <- hchart(grp_members2, "line", 
-#                    hcaes(x = joined_date, y = member_count, 
-#                          name = name, bio = bio, joined = joined)) %>%
-#   hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>% 
-#   hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership") %>%
-#   hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
-#                               "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
-#   hc_credits(enabled = TRUE,
-#              text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
-#              href = "http://rpubs.com/maraaverick/470388",
-#              style = list(
-#                fontSize = "14px")) %>% 
-#   hc_add_theme(hc_theme_flat(
-#     plotOptions = list(
-#       scatter = list(
-#         marker = list(radius = 4,
-#                       fillOpacity = 0.3)
-#       ))))  
-# 
-# grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
-#                               "line", 
-#                               hcaes(x = joined_date, y = member_count, 
-#                                     name = name, bio = bio, joined = joined)) %>%
-#   hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>% 
-#   hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership\n[ONLY latest year shown]") %>%
-#   hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
-#                               "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
-#   hc_credits(enabled = TRUE,
-#              text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
-#              href = "http://rpubs.com/maraaverick/470388",
-#              style = list(
-#                fontSize = "14px")) %>% 
-#   hc_add_theme(hc_theme_flat(
-#     plotOptions = list(
-#       scatter = list(
-#         marker = list(radius = 4,
-#                       fillOpacity = 0.3)
-#       ))))         
+grp_plot <- hchart(grp_members2, "line",
+                   hcaes(x = joined_date, y = member_count,
+                         name = name, bio = bio, joined = joined)) %>%
+  hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>%
+  hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership") %>%
+  hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
+                              "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
+  hc_credits(enabled = TRUE,
+             text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
+             href = "http://rpubs.com/maraaverick/470388",
+             style = list(
+               fontSize = "14px")) %>%
+  hc_add_theme(hc_theme_flat(
+    plotOptions = list(
+      scatter = list(
+        marker = list(radius = 4,
+                      fillOpacity = 0.3)
+      ))))
+
+grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
+                              "line",
+                              hcaes(x = joined_date, y = member_count,
+                                    name = name, bio = bio, joined = joined)) %>%
+  hc_tooltip(pointFormat = ("<b>{point.name}</b><br/>Bio: {point.bio}<br/>Joined Date: {point.joined_date}")) %>%
+  hc_title(text = "'Research Triangle Analysts' (@RTPAnalysts) Meetup membership\n[ONLY latest year shown]") %>%
+  hc_subtitle(text = str_glue("Preparing for Analytics>Forward 2019: keynote by ",
+                              "Jordan Meyer ", "(Kaggle->Zillow)")) %>%
+  hc_credits(enabled = TRUE,
+             text = "inspired by 2018 keynoter @dataandme [Mara Averick]",
+             href = "http://rpubs.com/maraaverick/470388",
+             style = list(
+               fontSize = "14px")) %>%
+  hc_add_theme(hc_theme_flat(
+    plotOptions = list(
+      scatter = list(
+        marker = list(radius = 4,
+                      fillOpacity = 0.3)
+      ))))
 
 ## ggsave fails on higchart htmlwidget object
-# saveWidget(grp_plot, file = paste0("RTAgrp.html"), 
+# saveWidget(grp_plot, file = paste0("RTAgrp.html"),
 #            selfcontained = FALSE)
-# saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"), 
+# saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"),
 #            selfcontained = FALSE)
 
 # Thanks http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
