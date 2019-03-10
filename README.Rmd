@@ -8,7 +8,7 @@ output:
     variant: markdown_github
 ---
 
-```{r setup, include=FALSE, cache = TRUE, echo = FALSE}
+```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 
 ################################################
@@ -35,6 +35,7 @@ github_file <- FALSE
 meetupgrp_name <- 'Research-Triangle-Analysts'
 
 source('Meetup_RSVP_Yes_latest.R')
+
 lst_out <- Meetup_RSVP_Yes_Count(save_to_folder, github_file, meetupgrp_name)
 allAF_frm <- lst_out[[1]]
 allAF_frm_weekday <- lst_out[[2]]
@@ -180,11 +181,12 @@ knitr::kable(allAF_frm %>% group_by(Year) %>%
 
 
 # For future collaborators
-This discusses the files available to facilitate engagement.
+To facilitate engagement by potential collaborators, the following discusses available files.
 
 ## Loading the R Project
-After installing R and R-Studio, fork this repo by clicking fork at the top-right. Then follow these instructions [these instructions] (https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN "from the RStudio web site") to create a new project that is a clone of this version controlled (think Github) repository. In the future, you can then double-click the AnalyticsForward_2019.Rproj file to open RStudio with the files of this project being easily accessible.
-[R Project image](Rproj_image.png "Double-click this file")
+After installing R and R-Studio, fork this repo by clicking fork at the top-right. Then follow 
+[these instructions from the RStudio web site](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN) to create a new project that is a clone of this version-controlled (think Github) repository. In the future, you can then double-click the AnalyticsForward_2019.Rproj file to open RStudio with the files of this project being easily accessible.
+![R Project image](Rproj_image.png "Double-click this file")
 
 ## Files
 1. Readme.Rmd creates what appears on the Github page, including this text.
@@ -199,9 +201,11 @@ After installing R and R-Studio, fork this repo by clicking fork at the top-righ
      +http://rpubs.com/zortiz/AnimatePlots
      +code available at https://github.com/DrZeydy/share/blob/master/RSVP-animate.R
      
-## Special Note
+## Special Notes
 Make sure you get your Meetup Key and place that value here in README.Rmd or before you run the Meetup_RSVP_Yes_Count() function, or you will see an Error concerning the Meetup Key environment variable:
-[Meetup Key Image](meetup_key_image.png "Must run this line as an uncommented line using your Meetup API Key.")
+![Meetup Key Image](meetup_key_image.png "Must run this line as an uncommented line using your Meetup API Key.")
+
+You might also consult the [R-Ladies meetupr package on Github](https://github.com/rladies/meetupr).
 
 ## More images
 Plenty of #AnalyticsForward images are available on Twitter and LinkedIn via #AnalyticsForward as well as this Facebook album: (http://bit.ly/2O126hX)
