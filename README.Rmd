@@ -1,11 +1,8 @@
 ---
 title: "Analytics>Forward 2019"
-author: "Rick Pack (Research Triangle Analysts)"
+author: "Rick Pack (VP of Research Triangle Analysts)"
 date: "March 10, 2019"
-# output: html_document
-output:
-  md_document:
-    variant: markdown_github
+output: github_document
 ---
 
 ```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
@@ -187,7 +184,7 @@ To facilitate engagement by potential collaborators, the following discusses ava
 After installing R and R-Studio, fork this repo by clicking fork at the top-right. Then follow 
 [these instructions from the RStudio web site](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN) to create a new project that is a clone of this version-controlled (think Github) repository. In the future, you can then double-click the AnalyticsForward_2019.Rproj file to open RStudio with the files of this project being easily accessible.
 
-![R Project image](Rproj_image.png "Double-click this file")
+![R Project image](Rproj_image.png)
 
 ## Files
 1. Readme.Rmd creates what appears on the Github page, including this text.
@@ -197,8 +194,9 @@ After installing R and R-Studio, fork this repo by clicking fork at the top-righ
      + Chuck Jaeger used Tableau to create this [Tableau storyboard](https://public.tableau.com/profile/chuck.jaeger#!/vizhome/AnalyticsForward2019/Storyboard).
      + Related, although he used the JMP Meetup API, Xan Gregg created images including [this one on Twitter](https://twitter.com/xangregg/status/1104359495059337217). Xan inspired many updates to the data visualizations presented here and Chuck also provided some thoughts, including the key stimulus that began all my early 2019 work.
 4. animate_sponsor_coord.R is a quick-reference for stitching together images into an animated .GIF
-5. AF_Pres.Rpres is a Xaringan presentation that has obvious imperfections I would love for others to help me fix
-6. Other files are images used in the Analytics>Forward presentation I did with Dr. Zeydy Ortiz. You can her gganimate() use for RSVPs at:
+5. AF_Pres.Rpres is a Xaringan presentation that has obvious imperfections I would love for others to help me fix.
+6. The RTAgrp .html files are what I called "Easter eggs" in my A>F presentation. These can be opened in a web browser to see the use of [Joshua Kunst's](https://twitter.com/jbkunst) highcharter package, inspired by the work of 2018 keynoter, [Mara Averick](http://rpubs.com/maraaverick/470388).
+7. Other files are images used in the Analytics>Forward presentation I did with Dr. Zeydy Ortiz. You can her gganimate() use for RSVPs at:
      + http://rpubs.com/zortiz/AnimatePlots
      + code available at https://github.com/DrZeydy/share/blob/master/RSVP-animate.R
      

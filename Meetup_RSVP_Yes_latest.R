@@ -629,10 +629,10 @@ grp_plot_latestyear <- hchart(grp_members2 %>% dplyr::filter(max_year_flag),
       ))))
 
 ## ggsave fails on higchart htmlwidget object
-# saveWidget(grp_plot, file = paste0("RTAgrp.html"),
-#            selfcontained = FALSE)
-# saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"),
-#            selfcontained = FALSE)
+ saveWidget(grp_plot, file = paste0("RTAgrp.html"),
+            selfcontained = FALSE)
+ saveWidget(grp_plot, file = paste0("RTAgrpLstYr.html"),
+            selfcontained = FALSE)
 
 # Thanks http://r-statistics.co/Top50-Ggplot2-Visualizations-MasterList-R-Code.html
 # grp_plot_geomcount <-
