@@ -7,10 +7,6 @@ output: github_document
 
 ```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-gitsubdir <- paste(tail(strsplit(getwd(),"/")[[1]],1),"/",sep="")
-gitrep <- "https://github.com/RickPack/AnalyticsForward_2019"
-gitbranch <- "master"
-knitr::opts_knit$set(base.url=paste(gitrep,"raw",gitbranch,gitsubdir,sep="/"))
 
 ################################################
 ## Get your Meetup key by going to            ##
