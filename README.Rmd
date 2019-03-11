@@ -6,7 +6,8 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE, cache = FALSE, echo = FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, 
+                      base.url = 'https://github.com/RickPack/AnalyticsForward_2019/raw/master/')
 
 ################################################
 ## Get your Meetup key by going to            ##
