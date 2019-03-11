@@ -80,7 +80,7 @@ Highest Performing Days (Registrations)
 Total Registrations for Analytics&gt;Forward per year
 -----------------------------------------------------
 
-    ## [1] "As of  2019-03-10 20:42:06"
+    ## [1] "As of  2019-03-11 06:52:47"
 
 | name                                                                  |  Year|  Total\_Registrations|
 |:----------------------------------------------------------------------|-----:|---------------------:|
@@ -105,7 +105,7 @@ Loading the R Project
 
 After installing R and R-Studio, fork this repo by clicking fork at the top-right. Then follow [these instructions from the RStudio web site](https://support.rstudio.com/hc/en-us/articles/200532077-Version-Control-with-Git-and-SVN) to create a new project that is a clone of this version-controlled (think Github) repository. In the future, you can then double-click the AnalyticsForward\_2019.Rproj file to open RStudio with the files of this project being easily accessible.
 
-![R Project image](Rproj_image.png)
+![R Project image](Rproj_image.PNG)
 
 Files
 -----
@@ -127,7 +127,7 @@ Special Notes
 
 Make sure you get your Meetup Key and place that value here in README.Rmd or before you run the Meetup\_RSVP\_Yes\_Count() function, or you will see an Error concerning the Meetup Key environment variable:
 
-![Meetup Key Image](meetup_key_image.png "Must run this line as an uncommented line using your Meetup API Key.")
+![Meetup Key Image](meetup_key_image.PNG "Must run this line as an uncommented line using your Meetup API Key.")
 
 You might also consult the [R-Ladies meetupr package on Github](https://github.com/rladies/meetupr).
 
