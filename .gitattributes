@@ -1,0 +1,9 @@
+# from https://github.com/alexkaratarakis/gitattributes/blob/master/Common.gitattributes
+*.html text
+*.csv text
+*.md text
+# Graphics
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
