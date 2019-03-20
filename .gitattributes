@@ -1,4 +1,8 @@
 # from https://github.com/alexkaratarakis/gitattributes/blob/master/Common.gitattributes
+* linguist-vendored
+*.js linguist-vendored=false
+*.R linguist-vendored=false
+*.Rmd linguist-vendored=false
 *.html text linguist-vendored
 *.csv text
 *.md text
